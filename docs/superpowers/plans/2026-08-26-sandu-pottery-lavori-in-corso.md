@@ -3483,6 +3483,12 @@ bun run lint
 
     Expected: `Checked N files`, and **no** "Found 1 info" line.
 
+11. `src/content/dizionario.ts` — `aggiungiAlCalendario` became unused when the
+    per-row calendar link moved onto the date itself. Remove the key from the
+    `Dizionario` type and both locales, then drop `tests/dizionario.test.ts`'s key
+    count from 21 back to 20. Run the suite and confirm it passes at 20 — if it
+    fails, the count and the type have drifted apart and that is worth knowing.
+
 - [ ] **Step 9: Final verification of every gate**
 
 ```bash
