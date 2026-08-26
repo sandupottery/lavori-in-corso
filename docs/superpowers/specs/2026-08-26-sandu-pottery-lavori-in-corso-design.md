@@ -60,7 +60,7 @@ Recovered from the dead Shopify store's still-live CDN and cached HTML:
 
 - Old tagline: *"Creazioni in ceramica lavorate a mano e al tornio. Made with
   love from Bergamo, Italy"*
-- Instagram: `@sandu_pottery` · Facebook: `Sandupottery-100063684326940`
+- Instagram: `@sandu_pottery` and `@letettazze` — two accounts for the two halves of her work. Facebook existed but the client asked for it to be dropped.
 - Old collection taxonomy (three brand worlds): animals (`animali`, `cani`,
   `gattetazze`); bodies (`tettazze`, `corpi-segnati`, `corpi-creatori`);
   botanicals (`foglie`, `mentine`, `more`, `fragole`, `nasturzi`, `malve`)
@@ -68,13 +68,22 @@ Recovered from the dead Shopify store's still-live CDN and cached HTML:
 The Wayback Machine holds essentially nothing (3 URLs, no product pages, no CDN
 assets), so no further recovery is possible without the Shopify admin login.
 
-### Open content dependencies (blocking publish, not build)
+### Client answers received 2026-08-26
+
+| Item | Answer |
+| --- | --- |
+| Public email | `info@sandupottery.com` — also her Shopify account address, so the mailbox is confirmed live on Aruba |
+| Social links | The two Instagram accounts only. Drop Facebook. |
+| P.IVA / company name | **Not published on this site.** The footer carries neither, and no placeholder stands in for them. |
+| Aruba access | Received. Unblocks the DNS work; still needs a Cloudflare account to migrate *to*. |
+| Shopify access | Password received, but 2FA is a passkey the client holds. The plan is cancelled with data retained for two years and reactivation offered at €1/month. |
+
+### Still open (blocks publish, not build)
 
 | Item | Needed for | Placeholder in build |
 | --- | --- | --- |
-| Public email address | contact section, JSON-LD | `[EMAIL DA CONFERMARE]` |
-| Business name, P.IVA / C.F. | footer (Italian legal requirement) | `[RAGIONE SOCIALE · P.IVA]` |
-| 8–10 photographs | gallery | 3 supplied + marked placeholders |
+| 8–10 photographs | gallery | 3 supplied + one marked placeholder tile |
+| Cloudflare account | DNS migration and Pages deploy | — |
 
 ## 5. Design system
 
@@ -152,8 +161,8 @@ hero        eyebrow · H1 · intro · [next-market card] · photo
 rule
 mercatini   "Dove mi trovi" · two-column card (rhythm | dates)
 galleria    "Qualche pezzo" · photo grid
-contatti    "Scrivimi" · email · Instagram · Facebook
-footer      business name · P.IVA · credit
+contatti    "Scrivimi" · email · due account Instagram
+footer      nome e città · credit
 ```
 
 ### Hero — "Biglietto"
@@ -381,15 +390,16 @@ docs/superpowers/specs/       this document
 | Nameserver change breaks her email | Replicate and verify the full zone before switching (§11) |
 | Gallery has too few photographs | Blocked on her Shopify login or 8–10 new photos; build ships with marked placeholders until then |
 | Calendar empties after Dec 2026 | Explicit empty state copy (§7) |
-| Client cannot supply P.IVA in time | Footer ships with a marked placeholder; page still goes live |
-| Shopify CDN goes dark before export | Logo and OG image already saved to `brand-assets/`; prioritise the Shopify login ask |
+| Shopify data purged after the two-year retention window | Logo and OG image already saved; reactivating at €1/month is the cheap recovery path and needs the client's passkey |
+| `info@sandupottery.com` breaks during the DNS cutover | It is the confirmed live mailbox — verify delivery to it specifically, before and after the nameserver switch |
 
 ## 15. Open questions
 
 None blocking implementation. Two blocking publish:
 
-1. Cloudflare access, which depends on the Aruba credentials.
-2. Email address, business details, and photographs from the client.
+1. **A Cloudflare account to migrate to.** The Aruba credentials are in hand, but
+   they only let us change nameservers — there must be a destination zone first.
+2. **Photographs.** Three are in hand; the gallery wants 8–10.
 
-The build proceeds with visibly marked placeholders for all three, and shows
-locally before anything is published.
+The build proceeds with a visibly marked placeholder tile for the missing
+photographs, and is shown locally before anything is published.

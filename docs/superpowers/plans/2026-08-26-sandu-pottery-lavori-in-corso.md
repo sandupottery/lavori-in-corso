@@ -21,7 +21,8 @@
 - **Palette tokens, exact values** — `porcellana #FAF7F3`, `sabbia #EDE3D6`, `inchiostro #241F1C`, `testo #4A423D`, `tenue #5B534E`, `nota #6E645B`, `terracotta #C2603A`, `terracotta-scritta #9A4526`, `rosa #E4A896`, `glassa #9FAEBD`, `verderame #4A6654`.
 - **Colour rules that are not negotiable:** `terracotta`, `rosa` and `glassa` must never be used for text. Links use `terracotta-scritta`. Every text/background pair must clear WCAG AA (4.5:1).
 - **Typefaces:** Quicksand (display) and Newsreader (body), self-hosted `woff2`, loaded with `next/font/local`. No `next/font/google` — the build must not depend on network access.
-- **Placeholders that ship:** the public email, the business name and P.IVA, and gallery photos beyond the three supplied are not yet confirmed by the client. They must appear as visibly bracketed placeholders (`[EMAIL DA CONFERMARE]`) — never invented values.
+- **Client-confirmed facts, do not change them:** the public email is `info@sandupottery.com`; the only social links are the two Instagram accounts `@sandu_pottery` and `@letettazze`; there is **no** Facebook link; the client does **not** publish a P.IVA or company name on this site, so the footer carries neither and no placeholder stands in for them.
+- **The one placeholder that still ships:** gallery photographs beyond the three supplied. It must appear as a visibly bracketed marker (`[SERVONO 8–10 FOTO]`) — never invented content.
 - **Timezone is `Europe/Rome`.** All "is this date past?" logic resolves today in Rome, never UTC. At 00:30 CEST a UTC-based date is still the previous day, which would make the page announce yesterday's market.
 - **Conventional commits**, enforced by commitlint. Types: `feat`, `fix`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`.
 
@@ -785,7 +786,8 @@ git commit -m "feat: add design tokens and self-hosted quicksand and newsreader"
   - `const mercati: readonly Mercato[]` — 25 entries, chronologically sorted
   - `type Ricorrenza = { luogo: string; regolaIt: string; regolaEn: string }`
   - `const ricorrenze: readonly Ricorrenza[]` — 3 entries
-  - `const sito` — `{ url, nome, email, instagram, facebook, ragioneSociale, partitaIva, citta }`
+  - `type Profilo = { etichetta: string; url: string }`
+  - `const sito` — `{ url, nome, citta, email, profili: readonly Profilo[] }`
 
 - [ ] **Step 1: Write the failing data-integrity test**
 
@@ -1133,26 +1135,30 @@ export const ricorrenze: readonly Ricorrenza[] = [
 - [ ] **Step 6: Write `src/content/sito.ts`**
 
 ```ts
-/**
- * Valori fra parentesi quadre = da confermare con la cliente.
- * Non inventarli: devono restare visibili finché non arriva il dato vero.
- */
+export type Profilo = {
+	etichetta: string;
+	url: string;
+};
+
 export const sito = {
 	url: "https://sandupottery.com",
 	nome: "Sandu Pottery",
 	citta: "Bergamo",
-	email: "[EMAIL DA CONFERMARE]",
-	instagram: "https://www.instagram.com/sandu_pottery/",
-	facebook: "https://www.facebook.com/p/Sandupottery-100063684326940/",
-	ragioneSociale: "[RAGIONE SOCIALE DA CONFERMARE]",
-	partitaIva: "[P.IVA DA CONFERMARE]",
+	email: "info@sandupottery.com",
+	/**
+	 * Due account, due mondi del suo lavoro: gli animali e i corpi.
+	 * Facebook è stato tolto su richiesta della cliente.
+	 */
+	profili: [
+		{ etichetta: "@sandu_pottery", url: "https://www.instagram.com/sandu_pottery/" },
+		{ etichetta: "@letettazze", url: "https://www.instagram.com/letettazze" },
+	] as readonly Profilo[],
 } as const;
-
-/** True finché la cliente non ha fornito il dato. Nasconde i mailto rotti. */
-export const emailDaConfermare = sito.email.startsWith("[");
 ```
 
-`emailDaConfermare` matters: a `mailto:[EMAIL DA CONFERMARE]` link is worse than no link, so Task 10 renders plain text until the real address arrives.
+La cliente non pubblica la partita IVA su questo sito: il piè di pagina non deve
+contenere né `ragioneSociale` né `partitaIva`, e non deve restare un segnaposto
+al loro posto.
 
 - [ ] **Step 7: Run all gates and commit**
 
@@ -1804,9 +1810,18 @@ describe("costruisciAttivita", () => {
 		expect(indirizzo.addressLocality).toBe("Bergamo");
 	});
 
-	test("elenca i profili social come sameAs", () => {
+	test("elenca entrambi i profili Instagram come sameAs", () => {
 		const a = costruisciAttivita("it") as Record<string, unknown>;
-		expect((a.sameAs as string[]).some((u) => u.includes("instagram"))).toBe(true);
+		const sameAs = a.sameAs as string[];
+		expect(sameAs.length).toBe(2);
+		expect(sameAs.every((u) => u.includes("instagram.com"))).toBe(true);
+		expect(sameAs.some((u) => u.includes("sandu_pottery"))).toBe(true);
+		expect(sameAs.some((u) => u.includes("letettazze"))).toBe(true);
+	});
+
+	test("non rimanda più a Facebook", () => {
+		const a = costruisciAttivita("it") as Record<string, unknown>;
+		expect((a.sameAs as string[]).some((u) => u.includes("facebook"))).toBe(false);
 	});
 });
 
@@ -1888,7 +1903,7 @@ export function costruisciAttivita(locale: Locale): object {
 			addressLocality: sito.citta,
 			addressCountry: "IT",
 		},
-		sameAs: [sito.instagram, sito.facebook],
+		sameAs: sito.profili.map((profilo) => profilo.url),
 	};
 }
 
@@ -1910,7 +1925,7 @@ Note the asymmetry, and do not "fix" it: `.ics` `DTEND` is **exclusive** (day af
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `bun test tests/jsonld.test.ts`
-Expected: PASS — 10 tests.
+Expected: PASS — 11 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -2717,7 +2732,7 @@ export function Galleria({ locale }: { locale: Locale }) {
 
 ```tsx
 import { dizionari } from "@/content/dizionario";
-import { emailDaConfermare, sito } from "@/content/sito";
+import { sito } from "@/content/sito";
 import type { Locale } from "@/lib/date";
 import { Filo } from "./Filo";
 
@@ -2735,39 +2750,27 @@ export function Contatti({ locale }: { locale: Locale }) {
 					<p className="max-w-md font-testo text-lg leading-relaxed text-sp-testo">
 						{d.scrivimiTesto}
 					</p>
-					{emailDaConfermare ? (
-						<p className="font-display text-xl font-semibold text-sp-nota">{sito.email}</p>
-					) : (
-						<a
-							href={`mailto:${sito.email}`}
-							className="self-start font-display text-xl font-semibold text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
-						>
-							{sito.email}
-						</a>
-					)}
+					<a
+						href={`mailto:${sito.email}`}
+						className="self-start font-display text-xl font-semibold text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
+					>
+						{sito.email}
+					</a>
 				</div>
 
-				<ul className="flex flex-col gap-3 font-display text-base lg:flex-row lg:gap-7 lg:pb-1">
-					<li>
-						<a
-							href={sito.instagram}
-							target="_blank"
-							rel="me noreferrer"
-							className="inline-flex min-h-11 items-center text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
-						>
-							Instagram — @sandu_pottery
-						</a>
-					</li>
-					<li>
-						<a
-							href={sito.facebook}
-							target="_blank"
-							rel="me noreferrer"
-							className="inline-flex min-h-11 items-center text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
-						>
-							Facebook
-						</a>
-					</li>
+				<ul className="flex flex-col gap-3 font-display text-base lg:pb-1">
+					{sito.profili.map((profilo) => (
+						<li key={profilo.url}>
+							<a
+								href={profilo.url}
+								target="_blank"
+								rel="me noreferrer"
+								className="inline-flex min-h-11 items-center text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
+							>
+								Instagram — {profilo.etichetta}
+							</a>
+						</li>
+					))}
 				</ul>
 			</div>
 		</section>
@@ -2775,7 +2778,9 @@ export function Contatti({ locale }: { locale: Locale }) {
 }
 ```
 
-`min-h-11` is 44px — the mobile hit-target floor from the spec.
+`min-h-11` is 44px — the mobile hit-target floor from the spec. The two
+Instagram accounts stack rather than sitting side by side: `@sandu_pottery` and
+`@letettazze` are long enough together to crowd a phone row.
 
 - [ ] **Step 3: Write `src/components/PiePagina.tsx`**
 
@@ -2791,11 +2796,8 @@ export function PiePagina({ locale }: { locale: Locale }) {
 
 	return (
 		<footer className="mx-auto w-full max-w-5xl px-6 pb-14 pt-20 sm:px-10">
-			<div className="flex flex-col gap-2 border-t border-sp-bordo pt-5 font-display text-xs text-sp-nota sm:flex-row sm:justify-between">
+			<div className="border-t border-sp-bordo pt-5 font-display text-xs text-sp-nota">
 				<span>{riga}</span>
-				<span>
-					{sito.ragioneSociale} · {sito.partitaIva}
-				</span>
 			</div>
 		</footer>
 	);
@@ -3270,10 +3272,8 @@ These are **not** implementation tasks. They are handoffs, tracked here so nothi
 
 1. **Aruba credentials** → create the Cloudflare zone, replicate the mail records from `docs/dns-cloudflare.md`, verify, then switch nameservers.
 2. **Cloudflare account** → set repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, create the Pages project `sandupottery-lavori-in-corso`.
-3. **Public email** → replace `sito.email`; `emailDaConfermare` flips to `false` and the address becomes a `mailto:` link automatically.
-4. **Business name and P.IVA** → replace `sito.ragioneSociale` and `sito.partitaIva`.
-5. **8–10 photographs** (or her Shopify login, from which they can be exported) → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile.
-6. **GitHub org** → create it, push, and confirm the repo is public.
+3. **8–10 photographs** → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile. The Shopify store is cancelled but its data is retained for two years, so reactivating at €1/month is the cheapest route to the full catalogue — that requires the client's passkey and is hers to do.
+4. **GitHub org** → create it, push, and confirm the repo is public.
 
 ---
 
