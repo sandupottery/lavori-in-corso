@@ -25,6 +25,11 @@ function aEvento(m: (typeof mercati)[number]): EventoICS {
 }
 
 async function main(): Promise<void> {
+	const { existsSync } = await import("node:fs");
+	if (!existsSync(join(process.cwd(), "out"))) {
+		throw new Error("out/ non esiste: esegui prima `next build`.");
+	}
+
 	await mkdir(USCITA, { recursive: true });
 
 	const eventi = mercati.map(aEvento);

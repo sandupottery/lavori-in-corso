@@ -18,7 +18,14 @@ export const metadata: Metadata = {
 		url: sito.url,
 		locale: "it_IT",
 		alternateLocale: ["en_GB"],
-		images: [{ url: "/foto/og.jpg", width: 1200, height: 630, alt: sito.nome }],
+		images: [
+			{
+				url: "/foto/og.jpg",
+				width: 1200,
+				height: 630,
+				alt: "Le mani della ceramista al tornio, mentre modella un pezzo",
+			},
+		],
 	},
 	twitter: {
 		card: "summary_large_image",

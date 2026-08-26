@@ -55,9 +55,10 @@ describe("mercati", () => {
 		const giorno = (iso: string) => new Date(`${iso}T12:00:00Z`).getUTCDay();
 		for (const m of mercati) {
 			if (ECCEZIONI.has(m.inizio)) continue;
-			// Bergamo Alta è di domenica, piazza Diaz di giovedì.
+			// Bergamo Alta è di domenica, piazza Diaz di giovedì, piazza Cavour di domenica.
 			if (m.luogo.includes("Torre Adalberto")) expect(giorno(m.inizio)).toBe(0);
 			if (m.luogo === "piazza Diaz") expect(giorno(m.inizio)).toBe(4);
+			if (m.luogo.includes("piazza Cavour")) expect(giorno(m.inizio)).toBe(0);
 		}
 	});
 

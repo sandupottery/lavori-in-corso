@@ -18,7 +18,14 @@ export const metadata: Metadata = {
 		url: `${sito.url}/en`,
 		locale: "en_GB",
 		alternateLocale: ["it_IT"],
-		images: [{ url: "/foto/og.jpg", width: 1200, height: 630, alt: sito.nome }],
+		images: [
+			{
+				url: "/foto/og.jpg",
+				width: 1200,
+				height: 630,
+				alt: "The potter's hands at the wheel, shaping a piece",
+			},
+		],
 	},
 	twitter: {
 		card: "summary_large_image",

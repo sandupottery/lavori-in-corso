@@ -1,5 +1,9 @@
 import { giornoDopo } from "@/lib/date";
 
+// Questo modulo usa il `Buffer` globale (in `piega`, sotto): esiste in Bun e
+// Node ma non nel browser. Oggi è importato solo dallo script di post-build
+// (`scripts/genera-ics.ts`) e dai suoi test — non importare `creaICS` in un
+// componente, o si scopre a runtime che manca.
 export type EventoICS = {
 	uid: string;
 	inizio: string;
@@ -71,7 +75,9 @@ export function creaICS(
 			`DTEND;VALUE=DATE:${data(giornoDopo(e.fine ?? e.inizio))}`,
 			`SUMMARY:${escapeTesto(e.titolo)}`,
 			`LOCATION:${escapeTesto(e.luogo)}`,
-			`URL:${escapeTesto(e.url)}`,
+			// URL è di tipo URI (RFC 5545 §3.3.13), non TEXT: niente escaping di
+			// virgole/punto e virgola come per gli altri campi.
+			`URL:${e.url}`,
 			"END:VEVENT",
 		);
 	}

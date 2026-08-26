@@ -58,6 +58,14 @@ describe("eOggi", () => {
 	test("falso prima dell'inizio", () => {
 		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-17")).toBe(false);
 	});
+
+	test("vero il primo giorno", () => {
+		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-18")).toBe(true);
+	});
+
+	test("vero l'ultimo giorno", () => {
+		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-20")).toBe(true);
+	});
 });
 
 describe("giornoDopo", () => {

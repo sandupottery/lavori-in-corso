@@ -12,7 +12,6 @@ export type Dizionario = {
 	ogniMeseNota: string;
 	prossimeDate: string;
 	nessunaData: string;
-	aggiungiAlCalendario: string;
 	tutteLeDate: string;
 	qualchePezzo: string;
 	qualcheSottotitolo: string;
@@ -38,7 +37,6 @@ export const dizionari: Record<Locale, Dizionario> = {
 		ogniMeseNota: "Queste non cambiano mai: se sei di Bergamo, sai già dove trovarmi.",
 		prossimeDate: "Prossime date",
 		nessunaData: "Le date del prossimo anno arrivano presto — scrivimi e ti dico dove sono.",
-		aggiungiAlCalendario: "Aggiungi al calendario",
 		tutteLeDate: "Scarica tutte le date",
 		qualchePezzo: "Qualche pezzo",
 		qualcheSottotitolo: "Gattetazze, corpi, foglie. Tutti fatti al tornio, uno per volta.",
@@ -64,7 +62,6 @@ export const dizionari: Record<Locale, Dizionario> = {
 		ogniMeseNota: "These never change — if you're local, you already know where I am.",
 		prossimeDate: "Upcoming dates",
 		nessunaData: "Next year's dates are coming soon — write to me and I'll tell you where I'll be.",
-		aggiungiAlCalendario: "Add to calendar",
 		tutteLeDate: "Download every date",
 		qualchePezzo: "A few pieces",
 		qualcheSottotitolo: "Cat cups, bodies, leaves. All thrown on the wheel, one at a time.",

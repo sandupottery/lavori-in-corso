@@ -14,6 +14,6 @@ export const sito = {
 	 */
 	profili: [
 		{ etichetta: "@sandu_pottery", url: "https://www.instagram.com/sandu_pottery/" },
-		{ etichetta: "@letettazze", url: "https://www.instagram.com/letettazze" },
+		{ etichetta: "@letettazze", url: "https://www.instagram.com/letettazze/" },
 	] as readonly Profilo[],
 } as const;

@@ -66,7 +66,12 @@ export function etichettaLunga(m: Intervallo, locale: Locale): string {
 	return `${primo} – ${formatta(m.fine, locale, conMese)}`;
 }
 
-/** Raggruppa per mese, conservando l'ordine cronologico. */
+/**
+ * Raggruppa per mese conservando l'ordine di arrivo.
+ * PRECONDIZIONE: `voci` deve essere già ordinato per `inizio`. Il confronto
+ * avviene solo con l'ultimo gruppo, quindi un mese che ricompare più avanti
+ * genererebbe un secondo gruppo invece di unirsi al primo.
+ */
 export function raggruppaPerMese<T extends Intervallo>(
 	voci: readonly T[],
 	locale: Locale,
