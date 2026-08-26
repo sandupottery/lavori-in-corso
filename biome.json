@@ -11,7 +11,9 @@
 			"!bun.lock",
 			"!src/fonts",
 			"!public",
-			"!.design"
+			"!.design",
+			"!.release-please-manifest.json",
+			"!CHANGELOG.md"
 		]
 	},
 	"formatter": { "enabled": true, "indentStyle": "tab", "lineWidth": 100 },
