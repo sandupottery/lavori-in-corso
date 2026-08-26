@@ -15,8 +15,8 @@ const FOTO = [
 	},
 	{
 		file: "/foto/tettazza.jpg",
-		it: "Una tettazza: tazza scultura in ceramica smaltata rosa",
-		en: "A “tettazza” — a sculptural mug in pink glazed ceramic",
+		it: "Tre tettazze impilate: tazze scultura in ceramica smaltata azzurra, rosa e verde",
+		en: "Three stacked “tettazze” — sculptural mugs in blue, pink and green glazed ceramic",
 	},
 	{
 		file: "/foto/tazze-foglie.jpg",
