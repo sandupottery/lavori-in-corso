@@ -61,14 +61,14 @@ export function Mercatini({ locale }: { locale: Locale }) {
 													href={m.mappa}
 													target="_blank"
 													rel="noreferrer"
-													className="font-testo text-[15px] leading-snug text-sp-testo underline decoration-sp-rosa underline-offset-2 hover:decoration-sp-terracotta"
+													className="inline-block py-1 font-testo text-[15px] leading-snug text-sp-testo underline decoration-sp-rosa underline-offset-2 hover:decoration-sp-terracotta"
 												>
 													{m.citta}, {m.luogo}
 													{m.dettaglio ? ` (${m.dettaglio})` : ""}
 												</a>{" "}
 												<a
 													href={`/calendario/${m.id}.ics`}
-													className="inline-block font-display text-xs text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-2 hover:decoration-sp-terracotta"
+													className="inline-block py-1 font-display text-xs text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-2 hover:decoration-sp-terracotta"
 												>
 													{d.aggiungiAlCalendario}
 												</a>
@@ -87,7 +87,7 @@ export function Mercatini({ locale }: { locale: Locale }) {
 					<a
 						data-tutte-le-date
 						href="/calendario/mercatini.ics"
-						className="self-start font-display text-sm font-semibold text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
+						className="inline-flex min-h-11 items-center self-start font-display text-sm font-semibold text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
 					>
 						{d.tutteLeDate}
 					</a>

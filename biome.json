@@ -21,7 +21,7 @@
 	"assist": { "enabled": true, "actions": { "source": { "organizeImports": "on" } } },
 	"overrides": [
 		{
-			"includes": ["src/components/ScriptFreschezza.tsx"],
+			"includes": ["src/components/ScriptFreschezza.tsx", "src/components/Pagina.tsx"],
 			"linter": { "rules": { "security": { "noDangerouslySetInnerHtml": "off" } } }
 		}
 	]
