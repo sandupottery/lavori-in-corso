@@ -22,8 +22,9 @@ describe("dizionari", () => {
 	});
 
 	test("nessuna stringa inglese è rimasta in italiano", () => {
-		// Sentinella grossolana ma efficace su una copia così breve.
-		expect(dizionari.en.titolo).not.toBe(dizionari.it.titolo);
-		expect(dizionari.en.doveMiTrovi).not.toBe(dizionari.it.doveMiTrovi);
+		const chiavi = Object.keys(dizionari.it) as (keyof typeof dizionari.it)[];
+		expect(chiavi.length).toBe(20);
+		const uguali = chiavi.filter((c) => dizionari.en[c] === dizionari.it[c]);
+		expect(uguali).toEqual([]);
 	});
 });
