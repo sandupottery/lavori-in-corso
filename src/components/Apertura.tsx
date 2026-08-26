@@ -12,7 +12,7 @@ export function Apertura({ locale }: { locale: Locale }) {
 				<p className="font-display text-[11px] uppercase tracking-[0.16em] text-sp-tenue">
 					{d.occhiello}
 				</p>
-				<h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-sp-inchiostro sm:text-5xl lg:text-6xl">
+				<h1 className="text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-sp-inchiostro sm:text-5xl lg:text-6xl">
 					{d.titolo}
 				</h1>
 				<p className="max-w-md font-testo text-lg leading-relaxed text-sp-testo sm:text-xl">

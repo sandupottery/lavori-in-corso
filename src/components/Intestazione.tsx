@@ -19,7 +19,7 @@ export function Intestazione({ locale }: { locale: Locale }) {
 			/>
 			<Link
 				href={d.altraLinguaHref}
-				className="font-display text-sm text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
+				className="inline-flex min-h-11 items-center font-display text-sm text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
 			>
 				{d.altraLingua}
 			</Link>
