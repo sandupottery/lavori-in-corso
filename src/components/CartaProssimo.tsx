@@ -23,7 +23,9 @@ export function CartaProssimo({ locale }: { locale: Locale }) {
 						hidden
 					>
 						<p className="font-display text-[11px] uppercase tracking-[0.14em] text-sp-tenue">
-							<span data-etichetta-prossimo>{d.prossimoMercatino}</span>
+							<span data-etichetta-prossimo data-oggi={d.oggiSonoA}>
+								{d.prossimoMercatino}
+							</span>
 						</p>
 						<p className="pt-1 font-display text-lg font-semibold text-sp-inchiostro">
 							{etichettaLunga(m, locale)}
