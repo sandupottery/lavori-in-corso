@@ -3489,6 +3489,28 @@ bun run lint
     count from 21 back to 20. Run the suite and confirm it passes at 20 — if it
     fails, the count and the type have drifted apart and that is worth knowing.
 
+12. `public/foto/og.jpg` — regenerate it from `mani-al-tornio.jpg` instead of
+    `gatti-calico.jpg`. Compared side by side at real link-preview size, the cat
+    photograph is a portrait composition forced into 1200×630 and loses the ears
+    to the crop, which reads as careless in a shared link; the wheel photograph
+    crops naturally and says "wheel-thrown by hand" to someone who has never met
+    her, which is exactly who a search-result preview reaches.
+
+```bash
+python3 - <<'EOF'
+from PIL import Image, ImageOps
+
+im = ImageOps.fit(Image.open("public/foto/mani-al-tornio.jpg").convert("RGB"), (1200, 630), Image.LANCZOS)
+pulita = Image.new(im.mode, im.size)
+pulita.putdata(list(im.getdata()))
+pulita.save("public/foto/og.jpg", "JPEG", quality=82, optimize=True)
+print(Image.open("public/foto/og.jpg").size, dict(Image.open("public/foto/og.jpg").getexif()) or "EXIF vuoto")
+EOF
+```
+
+    Then update the `alt` text in both routes' `openGraph.images` to describe the
+    wheel rather than the cats, in the matching language.
+
 - [ ] **Step 9: Final verification of every gate**
 
 ```bash
