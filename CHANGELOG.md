@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.1...sandupottery-lavori-in-corso-v0.1.2) (2026-08-26)
+
+
+### CI/CD
+
+* stop biome formatting the files release-please owns ([031daf6](https://github.com/sandupottery/lavori-in-corso/commit/031daf65fdf0d4c9cb032ffeb1d5b2f4dd7aecc6))
+
 ## [0.1.1](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.0...sandupottery-lavori-in-corso-v0.1.1) (2026-08-26)
 
 
