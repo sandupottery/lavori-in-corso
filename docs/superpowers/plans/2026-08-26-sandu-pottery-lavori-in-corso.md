@@ -3445,6 +3445,17 @@ Expected: non-zero exit naming `type-enum`.
    script and its tests today. Add a comment saying so, so nobody imports
    `creaICS` into a component and discovers it at runtime.
 
+10. `biome.json:18` — `"linter": { "rules": { "recommended": true } }` is
+    deprecated and prints an `info` on **every** lint run, in local runs and in
+    CI. Persistent noise is how people learn to stop reading lint output. Run
+    `bunx biome migrate --write`, then confirm the run is silent:
+
+```bash
+bun run lint
+```
+
+    Expected: `Checked N files`, and **no** "Found 1 info" line.
+
 - [ ] **Step 9: Final verification of every gate**
 
 ```bash
