@@ -2213,9 +2213,17 @@ python3 - <<'EOF'
 from PIL import Image
 
 SORGENTI = [
+    # Inviate dalla cliente
     ("docs/fonti-cliente/IMG_20240221_185700_427.webp", "public/foto/gatti-calico.jpg", 82),
     ("docs/fonti-cliente/IMG_20240221_185700_452.webp", "public/foto/gatti-grigi.jpg", 82),
     ("docs/fonti-cliente/IMG_20241023_165943.jpg", "public/foto/servizio-gatti.jpg", 78),
+    # Recuperate dalla CDN del vecchio negozio Shopify
+    ("docs/fonti-cliente/recuperate/mani-al-tornio.jpg", "public/foto/mani-al-tornio.jpg", 82),
+    ("docs/fonti-cliente/recuperate/tazze-foglie.jpg", "public/foto/tazze-foglie.jpg", 82),
+    ("docs/fonti-cliente/recuperate/tettazza.jpg", "public/foto/tettazza.jpg", 82),
+    ("docs/fonti-cliente/recuperate/brocca-mentine.jpg", "public/foto/brocca-mentine.jpg", 84),
+    ("docs/fonti-cliente/recuperate/colori-tavola.jpg", "public/foto/colori-tavola.jpg", 84),
+    ("docs/fonti-cliente/recuperate/ciondoli-cuore.jpg", "public/foto/ciondoli-cuore.jpg", 84),
 ]
 
 for sorgente, destinazione, qualita in SORGENTI:
@@ -2241,6 +2249,10 @@ print('IMMAGINI CON EXIF:', sporche or 'nessuna — corretto')
 sys.exit(1 if sporche else 0)
 "
 ```
+
+Nine images. `brocca-mentine`, `colori-tavola` and `ciondoli-cuore` are already
+below 1400px — `thumbnail()` leaves them untouched, which is correct; they are
+only ever rendered at roughly 300px in the gallery grid.
 
 Images are pre-sized because `images.unoptimized: true` means Next will not resize them. Each should land under ~250 KB.
 
@@ -2734,14 +2746,44 @@ import type { Locale } from "@/lib/date";
 
 const FOTO = [
 	{
+		file: "/foto/mani-al-tornio.jpg",
+		it: "Le mani della ceramista al tornio, mentre alza una ciotola",
+		en: "The potter's hands at the wheel, throwing a bowl",
+	},
+	{
 		file: "/foto/gatti-grigi.jpg",
 		it: "Due tazze-gatto smaltate, grigie e bianche, impilate",
 		en: "Two stacked grey and white glazed cat cups",
 	},
 	{
+		file: "/foto/tettazza.jpg",
+		it: "Una tettazza: tazza scultura in ceramica smaltata rosa",
+		en: "A “tettazza” — a sculptural mug in pink glazed ceramic",
+	},
+	{
+		file: "/foto/tazze-foglie.jpg",
+		it: "Tazze in ceramica decorate con foglie di fragola dipinte a mano",
+		en: "Ceramic mugs decorated with hand-painted strawberry leaves",
+	},
+	{
 		file: "/foto/servizio-gatti.jpg",
 		it: "Servizio da caffè con gatti e zampine dipinti a mano",
 		en: "Coffee set with hand-painted cats and paw prints",
+	},
+	{
+		file: "/foto/brocca-mentine.jpg",
+		it: "Brocca in ceramica con foglie di menta impresse, fotografata tra la menta",
+		en: "Ceramic jug with impressed mint leaves, photographed among mint",
+	},
+	{
+		file: "/foto/colori-tavola.jpg",
+		it: "Servizio da tavola a righe verdi e rosse su tessuto blu",
+		en: "Green and red striped tableware on blue cloth",
+	},
+	{
+		file: "/foto/ciondoli-cuore.jpg",
+		it: "Due ciondoli a cuore in ceramica smaltata verde",
+		en: "Two heart pendants in green glazed ceramic",
 	},
 ] as const;
 
@@ -2755,7 +2797,7 @@ export function Galleria({ locale }: { locale: Locale }) {
 			</h2>
 			<p className="pt-2 font-testo text-lg text-sp-tenue">{d.qualcheSottotitolo}</p>
 
-			<div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+			<div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
 				{FOTO.map((f) => (
 					<Image
 						key={f.file}
@@ -2766,12 +2808,6 @@ export function Galleria({ locale }: { locale: Locale }) {
 						className="h-44 w-full rounded-sm object-cover sm:h-64 lg:h-72"
 					/>
 				))}
-				{/* Segnaposto visibile: servono ancora 8-10 foto dalla cliente. */}
-				<div className="col-span-2 flex h-44 items-center justify-center rounded-sm border border-dashed border-sp-bordo p-5 sm:h-64 lg:col-span-1 lg:h-72">
-					<p className="text-center font-display text-xs leading-relaxed text-sp-nota">
-						[SERVONO 8–10 FOTO]
-					</p>
-				</div>
 			</div>
 		</section>
 	);
@@ -2931,11 +2967,21 @@ git commit -m "feat: add gallery, contact and footer with json-ld"
 ```bash
 mkdir -p src/app
 # Icona quadrata su fondo porcellana, dal logo recuperato.
-qlmanage -t -s 512 -o /tmp public/logo.svg
-# -z forza le dimensioni ignorando le proporzioni, e il logo è 691x221:
-# prima si ridimensiona conservando l'aspetto, poi si riempie il quadrato.
-sips -Z 480 /tmp/logo.svg.png --out /tmp/logo-480.png
-sips -s format png -p 512 512 --padColor FAF7F3 /tmp/logo-480.png --out src/app/icon.png
+# Usa il marchio quadrato (la tazza vista dall'alto), non il logo esteso:
+# `docs/fonti-cliente/recuperate/marchio-tazza.png` è 717x617 e recuperato
+# dalla CDN del vecchio negozio. Niente `sips`: non toglie i metadati.
+python3 - <<'EOF'
+from PIL import Image
+
+marchio = Image.open("docs/fonti-cliente/recuperate/marchio-tazza.png").convert("RGBA")
+marchio.thumbnail((432, 432), Image.LANCZOS)
+tela = Image.new("RGBA", (512, 512), (250, 247, 243, 255))
+tela.paste(marchio, ((512 - marchio.width) // 2, (512 - marchio.height) // 2), marchio)
+pulita = Image.new("RGB", tela.size, (250, 247, 243))
+pulita.paste(tela, mask=tela.split()[3])
+pulita.save("src/app/icon.png", "PNG", optimize=True)
+print(f"icon.png 512x512 dal marchio {marchio.width}x{marchio.height}")
+EOF
 cp src/app/icon.png src/app/apple-icon.png
 # Immagine social 1200x630 dalla foto d'apertura, senza metadati.
 python3 - <<'EOF'
@@ -3377,6 +3423,27 @@ Expected: non-zero exit naming `type-enum`.
  * genererebbe un secondo gruppo invece di unirsi al primo.
  */
 ```
+
+7. `scripts/genera-ics.ts` — `mkdir(out/calendario, { recursive: true })` silently
+   creates `out/` too, so running the script standalone against a missing build
+   produces an orphaned `out/calendario` with no site around it. Fail loudly
+   instead:
+
+```ts
+	const { existsSync } = await import("node:fs");
+	if (!existsSync(join(process.cwd(), "out"))) {
+		throw new Error("out/ non esiste: esegui prima `next build`.");
+	}
+```
+
+8. `src/lib/ics.ts` — the `URL:` property is a URI, not a TEXT value, so it must
+   not be comma/semicolon-escaped. Harmless with today's data, wrong by RFC 5545.
+   Emit `URL:${e.url}` directly and note why in a comment.
+
+9. `src/lib/ics.ts` — this module uses the global `Buffer`, which exists in Bun
+   and Node but not in a browser. It is only ever imported by the post-build
+   script and its tests today. Add a comment saying so, so nobody imports
+   `creaICS` into a component and discovers it at runtime.
 
 - [ ] **Step 9: Final verification of every gate**
 

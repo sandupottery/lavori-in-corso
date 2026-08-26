@@ -78,12 +78,36 @@ assets), so no further recovery is possible without the Shopify admin login.
 | Aruba access | Received. Unblocks the DNS work; still needs a Cloudflare account to migrate *to*. |
 | Shopify access | Password received, but 2FA is a passkey the client holds. The plan is cancelled with data retained for two years and reactivation offered at €1/month. |
 
+### Photographs — resolved without payment, 2026-08-26
+
+The client declined the €1 Shopify reactivation. Six further photographs plus a
+square logo mark were instead recovered from the dead store's still-live CDN, by
+extracting filenames from the archived homepage HTML and fetching them directly:
+
+| File | Source resolution | Subject |
+| --- | --- | --- |
+| `mani-al-tornio.jpg` | 3120×3112 | her hands at the wheel — the making |
+| `tazze-foglie.jpg` | 3120×4160 | strawberry-leaf mugs (`foglie`) |
+| `tettazza.jpg` | 3120×4160 | a *tettazza* (`tettazze`) |
+| `brocca-mentine.jpg` | 710×894 | mint-leaf jug (`mentine`) |
+| `colori-tavola.jpg` | 640×640 | striped tableware (`colori per la tavola`) |
+| `ciondoli-cuore.jpg` | 976×975 | heart pendants (`ciondoli`) |
+| `marchio-tazza.png` | 717×617 | the cup mark alone — favicon source |
+
+All seven carried EXIF, now stripped. With the client's three emailed photographs
+this makes nine, which fills the gallery and covers four of her collections plus a
+process shot. The placeholder tile is removed.
+
+This is the floor of what the CDN route can give: Shopify's CDN has no directory
+listing, product filenames carry UUIDs, and the Wayback Machine holds three URLs
+with no product pages. For the permanent site the complete free source is the
+client's own Instagram data export, which she can run on either account.
+
 ### Still open (blocks publish, not build)
 
-| Item | Needed for | Placeholder in build |
+| Item | Needed for | Status |
 | --- | --- | --- |
-| 8–10 photographs | gallery | 3 supplied + one marked placeholder tile |
-| Cloudflare account | DNS migration and Pages deploy | — |
+| Cloudflare nameserver cutover | pointing the domain at Pages | zone created and corrected; awaiting go-ahead |
 
 ## 5. Design system
 
