@@ -48,4 +48,14 @@
 			transform: none;
 		}
 	}
+
+	/* Lo stato di partenza vive nel CSS, non in un attributo che React
+	   possiede: l'idratazione ripristinerebbe il proprio valore di `hidden`
+	   e annullerebbe lo script. React non tocca element.style se il
+	   componente non passa una prop `style`, quindi lo script usa quello. */
+	[data-voce-prossimo],
+	[data-nessuna-data],
+	[data-etichetta-oggi] {
+		display: none;
+	}
 }

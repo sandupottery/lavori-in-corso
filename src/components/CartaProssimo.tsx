@@ -15,17 +15,10 @@ export function CartaProssimo({ locale }: { locale: Locale }) {
 			<Zampina className="mt-1 w-5 shrink-0 text-sp-terracotta" />
 			<div>
 				{mercati.map((m) => (
-					<div
-						key={m.id}
-						data-voce-prossimo
-						data-inizio={m.inizio}
-						data-fine={ultimoGiorno(m)}
-						hidden
-					>
+					<div key={m.id} data-voce-prossimo data-inizio={m.inizio} data-fine={ultimoGiorno(m)}>
 						<p className="font-display text-[11px] uppercase tracking-[0.14em] text-sp-tenue">
-							<span data-etichetta-prossimo data-oggi={d.oggiSonoA}>
-								{d.prossimoMercatino}
-							</span>
+							<span data-etichetta-prossimo>{d.prossimoMercatino}</span>
+							<span data-etichetta-oggi>{d.oggiSonoA}</span>
 						</p>
 						<p className="pt-1 font-display text-lg font-semibold text-sp-inchiostro">
 							{etichettaLunga(m, locale)}

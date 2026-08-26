@@ -80,7 +80,7 @@ export function Mercatini({ locale }: { locale: Locale }) {
 						))}
 					</div>
 
-					<p data-nessuna-data hidden className="font-testo text-lg text-sp-testo">
+					<p data-nessuna-data className="font-testo text-lg text-sp-testo">
 						{d.nessunaData}
 					</p>
 
