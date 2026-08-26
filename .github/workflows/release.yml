@@ -30,8 +30,16 @@ jobs:
             # Omitting it lets the action read those config files by their
             # default names instead. Check the first release run after this
             # change to confirm the config is actually picked up.
+            # `target-branch` is explicit on purpose. Without it the action
+            # takes its target from the repository's DEFAULT branch, which is a
+            # GitHub setting rather than anything visible in this file — the
+            # first run of this workflow tried to release `dev` because the repo
+            # had been created from that branch. Naming it here means the
+            # release always follows `main`, whatever the repo setting says.
             - uses: googleapis/release-please-action@v4
               id: release
+              with:
+                  target-branch: main
 
     deploy:
         needs: [ci, release]
