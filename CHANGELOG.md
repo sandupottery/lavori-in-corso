@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.2...sandupottery-lavori-in-corso-v0.1.3) (2026-08-26)
+
+
+### Bug Fixes
+
+* create the pages project on first deploy and publish to production ([01de6f7](https://github.com/sandupottery/lavori-in-corso/commit/01de6f76fa86780f48b485214019f36880ff10d9))
+
 ## [0.1.2](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.1...sandupottery-lavori-in-corso-v0.1.2) (2026-08-26)
 
 
