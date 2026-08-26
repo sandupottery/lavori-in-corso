@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme {
+	/* ── Colori, campionati dagli smalti ── */
+	--color-sp-porcellana: #faf7f3;
+	--color-sp-sabbia: #ede3d6;
+	--color-sp-inchiostro: #241f1c;
+	--color-sp-testo: #4a423d;
+	--color-sp-tenue: #5b534e;
+	--color-sp-nota: #6e645b;
+	--color-sp-terracotta: #c2603a;
+	--color-sp-terracotta-scritta: #9a4526;
+	--color-sp-rosa: #e4a896;
+	--color-sp-glassa: #9faebd;
+	--color-sp-verderame: #4a6654;
+	--color-sp-bordo: #dfd1bf;
+
+	/* ── Caratteri ── */
+	/* Ponte fra le variabili di next/font (su <html>) e le utility Tailwind */
+	--font-display: var(--font-display-var);
+	--font-testo: var(--font-testo-var);
+}
+
+@layer base {
+	:root {
+		color-scheme: light;
+	}
+
+	body {
+		background-color: var(--color-sp-porcellana);
+		color: var(--color-sp-inchiostro);
+	}
+
+	/* Una sola animazione in tutto il sito, e si disattiva su richiesta */
+	@media (prefers-reduced-motion: no-preference) {
+		.sp-entra {
+			animation: sp-entra 0.5s ease-out both;
+		}
+	}
+
+	@keyframes sp-entra {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* Lo stato di partenza vive nel CSS, non in un attributo che React
+	   possiede: l'idratazione ripristinerebbe il proprio valore di `hidden`
+	   e annullerebbe lo script. React non tocca element.style se il
+	   componente non passa una prop `style`, quindi lo script usa quello.
+
+	   [data-nessun-prossimo] (il fallback della carta "prossimo mercatino",
+	   in CartaProssimo.tsx) è DELIBERATAMENTE assente da questo elenco: parte
+	   visibile e lo script lo nasconde quando trova una data valida — polarità
+	   invertita rispetto a tutto il resto qui sotto, che parte nascosto e
+	   viene rivelato. Le due direzioni sono entrambe corrette e volute; non
+	   "correggere" aggiungendolo qui, altrimenti la carta in testa alla
+	   pagina mostrerebbe sempre lo stato vuoto. */
+	[data-voce-prossimo],
+	[data-nessuna-data],
+	[data-etichetta-oggi] {
+		display: none;
+	}
+}

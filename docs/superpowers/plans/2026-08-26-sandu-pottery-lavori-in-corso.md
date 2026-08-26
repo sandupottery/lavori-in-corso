@@ -21,7 +21,8 @@
 - **Palette tokens, exact values** — `porcellana #FAF7F3`, `sabbia #EDE3D6`, `inchiostro #241F1C`, `testo #4A423D`, `tenue #5B534E`, `nota #6E645B`, `terracotta #C2603A`, `terracotta-scritta #9A4526`, `rosa #E4A896`, `glassa #9FAEBD`, `verderame #4A6654`.
 - **Colour rules that are not negotiable:** `terracotta`, `rosa` and `glassa` must never be used for text. Links use `terracotta-scritta`. Every text/background pair must clear WCAG AA (4.5:1).
 - **Typefaces:** Quicksand (display) and Newsreader (body), self-hosted `woff2`, loaded with `next/font/local`. No `next/font/google` — the build must not depend on network access.
-- **Placeholders that ship:** the public email, the business name and P.IVA, and gallery photos beyond the three supplied are not yet confirmed by the client. They must appear as visibly bracketed placeholders (`[EMAIL DA CONFERMARE]`) — never invented values.
+- **Client-confirmed facts, do not change them:** the public email is `info@sandupottery.com`; the only social links are the two Instagram accounts `@sandu_pottery` and `@letettazze`; there is **no** Facebook link; the client does **not** publish a P.IVA or company name on this site, so the footer carries neither and no placeholder stands in for them.
+- **The one placeholder that still ships:** gallery photographs beyond the three supplied. It must appear as a visibly bracketed marker (`[SERVONO 8–10 FOTO]`) — never invented content.
 - **Timezone is `Europe/Rome`.** All "is this date past?" logic resolves today in Rome, never UTC. At 00:30 CEST a UTC-based date is still the previous day, which would make the page announce yesterday's market.
 - **Conventional commits**, enforced by commitlint. Types: `feat`, `fix`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`.
 
@@ -89,7 +90,9 @@ public/
 
 **Interfaces:**
 - Consumes: nothing (first task)
-- Produces: a repo where `bun run build`, `bun run lint`, `bunx tsc --noEmit` and `bun test` all succeed. Every later task assumes these four commands exist.
+- Produces: a repo where `bun run build`, `bun run lint`, `bunx tsc --noEmit` and `bun run test` all succeed. Every later task assumes these four commands exist.
+
+  Note on the test gate: bare `bun test` **exits 1** when no test files match — that is bun's behaviour, not a misconfiguration, and there is no bunfig or env-var override, only the `--pass-with-no-tests` CLI flag. So until Task 3 lands the first suite, `package.json`'s `test` script carries that flag and CI and lefthook both invoke `bun run test`. **Task 3 removes the flag** once real tests exist, so a future glob breakage or an accidentally emptied `tests/` directory fails CI instead of passing green.
 
 - [ ] **Step 1: Initialise the repo and move the source material out of the root**
 
@@ -181,7 +184,6 @@ export default nextConfig;
 		"isolatedModules": true,
 		"jsx": "react-jsx",
 		"incremental": true,
-		"types": ["bun-types"],
 		"plugins": [{ "name": "next" }],
 		"paths": { "@/*": ["./src/*"] }
 	},
@@ -196,6 +198,8 @@ export default nextConfig;
 	"exclude": ["node_modules", "out"]
 }
 ```
+
+There is deliberately no `types` array: `@types/bun` is auto-included, and an explicit array would disable that and break `import ... from "bun:test"`.
 
 `noUncheckedIndexedAccess` is on deliberately: the calendar code indexes arrays constantly and this catches the off-by-one class of bug at compile time.
 
@@ -319,6 +323,7 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 .DS_Store
 .env*.local
+.superpowers/
 .design/*.html
 !.design/*.dc.html
 ```
@@ -556,15 +561,17 @@ export default function Home() {
 
 - [ ] **Step 10: Install and verify all four gates**
 
+Set the `test` script to `bun test --pass-with-no-tests` and have both `ci.yml` and `lefthook.yml` invoke `bun run test` rather than bare `bun test` — see the note under Interfaces for why.
+
 ```bash
 bun install
 bunx next build
 bun run lint
 bunx tsc --noEmit
-bun test
+bun run test
 ```
 
-Expected: `next build` writes `out/index.html`; lint and typecheck pass; `bun test` reports zero tests found and exits 0. `bun run build` still fails on the missing ics script — that is expected until Task 5.
+Expected: `next build` writes `out/index.html`; lint and typecheck pass; `bun run test` reports zero tests found and exits 0. `bun run build` still fails on the missing ics script — that is expected until Task 5.
 
 - [ ] **Step 11: Install the git hooks and commit**
 
@@ -783,7 +790,8 @@ git commit -m "feat: add design tokens and self-hosted quicksand and newsreader"
   - `const mercati: readonly Mercato[]` — 25 entries, chronologically sorted
   - `type Ricorrenza = { luogo: string; regolaIt: string; regolaEn: string }`
   - `const ricorrenze: readonly Ricorrenza[]` — 3 entries
-  - `const sito` — `{ url, nome, email, instagram, facebook, ragioneSociale, partitaIva, citta }`
+  - `type Profilo = { etichetta: string; url: string }`
+  - `const sito` — `{ url, nome, citta, email, profili: readonly Profilo[] }`
 
 - [ ] **Step 1: Write the failing data-integrity test**
 
@@ -1131,34 +1139,55 @@ export const ricorrenze: readonly Ricorrenza[] = [
 - [ ] **Step 6: Write `src/content/sito.ts`**
 
 ```ts
-/**
- * Valori fra parentesi quadre = da confermare con la cliente.
- * Non inventarli: devono restare visibili finché non arriva il dato vero.
- */
+export type Profilo = {
+	etichetta: string;
+	url: string;
+};
+
 export const sito = {
 	url: "https://sandupottery.com",
 	nome: "Sandu Pottery",
 	citta: "Bergamo",
-	email: "[EMAIL DA CONFERMARE]",
-	instagram: "https://www.instagram.com/sandu_pottery/",
-	facebook: "https://www.facebook.com/p/Sandupottery-100063684326940/",
-	ragioneSociale: "[RAGIONE SOCIALE DA CONFERMARE]",
-	partitaIva: "[P.IVA DA CONFERMARE]",
+	email: "info@sandupottery.com",
+	/**
+	 * Due account, due mondi del suo lavoro: gli animali e i corpi.
+	 * Facebook è stato tolto su richiesta della cliente.
+	 */
+	profili: [
+		{ etichetta: "@sandu_pottery", url: "https://www.instagram.com/sandu_pottery/" },
+		{ etichetta: "@letettazze", url: "https://www.instagram.com/letettazze" },
+	] as readonly Profilo[],
 } as const;
-
-/** True finché la cliente non ha fornito il dato. Nasconde i mailto rotti. */
-export const emailDaConfermare = sito.email.startsWith("[");
 ```
 
-`emailDaConfermare` matters: a `mailto:[EMAIL DA CONFERMARE]` link is worse than no link, so Task 10 renders plain text until the real address arrives.
+La cliente non pubblica la partita IVA su questo sito: il piè di pagina non deve
+contenere né `ragioneSociale` né `partitaIva`, e non deve restare un segnaposto
+al loro posto.
 
-- [ ] **Step 7: Run all gates and commit**
+- [ ] **Step 7: Remove the empty-suite escape hatch**
+
+Task 1 set `"test": "bun test --pass-with-no-tests"` because bun exits 1 with no
+test files. Real tests now exist, so drop the flag — otherwise a broken glob or
+an emptied `tests/` directory would pass CI green with zero tests run.
+
+In `package.json`:
+
+```json
+		"test": "bun test",
+```
+
+Leave `ci.yml` and `lefthook.yml` invoking `bun run test`; only the flag goes.
+
+- [ ] **Step 8: Run all gates and commit**
 
 ```bash
-bun test && bun run lint && bunx tsc --noEmit
-git add src/content tests/mercati.test.ts
+bun run test && bun run lint && bunx tsc --noEmit
+git add src/content tests/mercati.test.ts package.json
 git commit -m "feat: add market calendar, recurring markets and site constants"
 ```
+
+Verify the flag is genuinely gone by confirming `bun run test` still passes with
+the suite present — it must, because `tests/mercati.test.ts` matches.
 
 ---
 
@@ -1518,6 +1547,20 @@ describe("creaICS", () => {
 		expect(ics).toContain("\r\n A");
 	});
 
+	test("non spezza un carattere multi-byte a fine riga", () => {
+		// Accenti fitti attorno all'ottetto 75: se la maschera di continuazione
+		// non viene applicata, qui compare un carattere di sostituzione.
+		const titolo = `${"è".repeat(60)} coda`;
+		const ics = creaICS([{ ...evento, titolo }], "Mercatini", STAMP);
+		expect(ics).not.toContain("\uFFFD");
+		const ricomposto = ics
+			.split("\r\n")
+			.filter((r) => r.startsWith("SUMMARY:") || r.startsWith(" "))
+			.map((r, i) => (i === 0 ? r.slice("SUMMARY:".length) : r.slice(1)))
+			.join("");
+		expect(ricomposto).toBe(titolo);
+	});
+
 	test("è deterministico a parità di input", () => {
 		expect(creaICS([evento], "Mercatini", STAMP)).toBe(creaICS([evento], "Mercatini", STAMP));
 	});
@@ -1567,8 +1610,11 @@ function piega(riga: string): string {
 
 	while (inizio < byte.length) {
 		let fine = Math.min(inizio + limite, byte.length);
-		// Non spezzare mai a metà di un carattere multi-byte.
-		while (fine > inizio && fine < byte.length && (byte[fine] as number & 0xc0) === 0x80) {
+		// Non spezzare mai a metà di un carattere multi-byte: i byte di
+		// continuazione UTF-8 hanno i due bit alti a 10.
+		// Le parentesi contano: `x as number & 0xc0` verrebbe letto come
+		// intersezione di tipi e la maschera non verrebbe mai applicata.
+		while (fine > inizio && fine < byte.length && ((byte[fine] as number) & 0xc0) === 0x80) {
 			fine--;
 		}
 		pezzi.push(byte.subarray(inizio, fine).toString("utf8"));
@@ -1618,7 +1664,7 @@ export function creaICS(
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `bun test tests/ics.test.ts`
-Expected: PASS — 8 tests.
+Expected: PASS — 9 tests.
 
 - [ ] **Step 5: Write `scripts/genera-ics.ts`**
 
@@ -1785,9 +1831,18 @@ describe("costruisciAttivita", () => {
 		expect(indirizzo.addressLocality).toBe("Bergamo");
 	});
 
-	test("elenca i profili social come sameAs", () => {
+	test("elenca entrambi i profili Instagram come sameAs", () => {
 		const a = costruisciAttivita("it") as Record<string, unknown>;
-		expect((a.sameAs as string[]).some((u) => u.includes("instagram"))).toBe(true);
+		const sameAs = a.sameAs as string[];
+		expect(sameAs.length).toBe(2);
+		expect(sameAs.every((u) => u.includes("instagram.com"))).toBe(true);
+		expect(sameAs.some((u) => u.includes("sandu_pottery"))).toBe(true);
+		expect(sameAs.some((u) => u.includes("letettazze"))).toBe(true);
+	});
+
+	test("non rimanda più a Facebook", () => {
+		const a = costruisciAttivita("it") as Record<string, unknown>;
+		expect((a.sameAs as string[]).some((u) => u.includes("facebook"))).toBe(false);
 	});
 });
 
@@ -1798,8 +1853,25 @@ describe("graficoJsonLd", () => {
 		expect((analizzato["@graph"] as unknown[]).length).toBe(2);
 	});
 
-	test("non contiene < che possa chiudere il tag script", () => {
-		expect(graficoJsonLd([unGiorno], "it")).not.toContain("<");
+	test("neutralizza i < che potrebbero chiudere il tag script", () => {
+		// La fixture DEVE contenere un < reale: senza, l'asserzione passerebbe
+		// anche cancellando l'escape, che è esattamente ciò che deve impedire.
+		const ostile: Mercato = {
+			id: "2026-09-24-ostile",
+			inizio: "2026-09-24",
+			citta: "Milano",
+			luogo: "</script><script>alert(1)</script>",
+			mappa: "https://www.google.com/maps/search/?api=1&query=x",
+		};
+		const grafo = graficoJsonLd([ostile], "it");
+		expect(grafo).not.toContain("<");
+		expect(grafo).toContain("\\u003c");
+		// L'escape protegge l'HTML, non deve corrompere il dato: ri-analizzato
+		// il valore torna identico. Uno "strip" passerebbe le due righe sopra.
+		const analizzato = JSON.parse(grafo) as { "@graph": Record<string, unknown>[] };
+		const evento = analizzato["@graph"].find((n) => n["@type"] === "Event");
+		const luogo = evento?.location as Record<string, unknown>;
+		expect(luogo.name).toBe("</script><script>alert(1)</script>");
 	});
 });
 ```
@@ -1869,7 +1941,7 @@ export function costruisciAttivita(locale: Locale): object {
 			addressLocality: sito.citta,
 			addressCountry: "IT",
 		},
-		sameAs: [sito.instagram, sito.facebook],
+		sameAs: sito.profili.map((profilo) => profilo.url),
 	};
 }
 
@@ -1891,7 +1963,7 @@ Note the asymmetry, and do not "fix" it: `.ics` `DTEND` is **exclusive** (day af
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `bun test tests/jsonld.test.ts`
-Expected: PASS — 10 tests.
+Expected: PASS — 11 tests. Then delete `.replace(/</g, "\\u003c")` from `src/lib/jsonld.ts`, re-run, and confirm this one test FAILS before restoring it. A guard nobody has watched fail is not yet a guard.
 
 - [ ] **Step 5: Commit**
 
@@ -1944,9 +2016,11 @@ describe("dizionari", () => {
 	});
 
 	test("nessuna stringa inglese è rimasta in italiano", () => {
-		// Sentinella grossolana ma efficace su una copia così breve.
-		expect(dizionari.en.titolo).not.toBe(dizionari.it.titolo);
-		expect(dizionari.en.doveMiTrovi).not.toBe(dizionari.it.doveMiTrovi);
+		const chiavi = Object.keys(dizionari.it) as (keyof typeof dizionari.it)[];
+		// Senza questa riga un dizionario svuotato farebbe passare il filtro.
+		expect(chiavi.length).toBe(20);
+		const uguali = chiavi.filter((c) => dizionari.en[c] === dizionari.it[c]);
+		expect(uguali).toEqual([]);
 	});
 });
 ```
@@ -2019,7 +2093,7 @@ export const dizionari: Record<Locale, Dizionario> = {
 		prossimoMercatino: "Next market",
 		oggiSonoA: "Today I'm at",
 		doveMiTrovi: "Where to find me",
-		doveSottotitolo: "A stall, a wheel and a lot of cats. Say hello if you're passing.",
+		doveSottotitolo: "A stall, a wheel and cats. Come by — I'll know you.",
 		ogniMeseSempre: "Every month, always",
 		ogniMeseNota: "These never change — if you're local, you already know where I am.",
 		prossimeDate: "Upcoming dates",
@@ -2147,16 +2221,57 @@ git commit -m "feat: add italian and english routes with a type-linked dictionar
 
 - [ ] **Step 1: Prepare the hero photograph**
 
+**Do not use `sips` here.** It preserves EXIF, and one of the source photographs
+carried GPS coordinates. That source file has been cleaned, but the pipeline
+itself must not be able to reintroduce location data into a published image.
+Pillow drops EXIF unless explicitly told to keep it, so use it:
+
 ```bash
 mkdir -p public/foto
-sips -s format jpeg -Z 1400 -s formatOptions 72 \
-  "docs/fonti-cliente/IMG_20240221_185700_427.webp" --out public/foto/gatti-calico.jpg
-sips -s format jpeg -Z 1400 -s formatOptions 72 \
-  "docs/fonti-cliente/IMG_20240221_185700_452.webp" --out public/foto/gatti-grigi.jpg
-sips -s format jpeg -Z 1400 -s formatOptions 68 \
-  "docs/fonti-cliente/IMG_20241023_165943.jpg" --out public/foto/servizio-gatti.jpg
+python3 - <<'EOF'
+from PIL import Image
+
+SORGENTI = [
+    # Inviate dalla cliente
+    ("docs/fonti-cliente/IMG_20240221_185700_427.webp", "public/foto/gatti-calico.jpg", 82),
+    ("docs/fonti-cliente/IMG_20240221_185700_452.webp", "public/foto/gatti-grigi.jpg", 82),
+    ("docs/fonti-cliente/IMG_20241023_165943.jpg", "public/foto/servizio-gatti.jpg", 78),
+    # Recuperate dalla CDN del vecchio negozio Shopify
+    ("docs/fonti-cliente/recuperate/mani-al-tornio.jpg", "public/foto/mani-al-tornio.jpg", 82),
+    ("docs/fonti-cliente/recuperate/tazze-foglie.jpg", "public/foto/tazze-foglie.jpg", 82),
+    ("docs/fonti-cliente/recuperate/tettazza.jpg", "public/foto/tettazza.jpg", 82),
+    ("docs/fonti-cliente/recuperate/brocca-mentine.jpg", "public/foto/brocca-mentine.jpg", 84),
+    ("docs/fonti-cliente/recuperate/colori-tavola.jpg", "public/foto/colori-tavola.jpg", 84),
+    ("docs/fonti-cliente/recuperate/ciondoli-cuore.jpg", "public/foto/ciondoli-cuore.jpg", 84),
+]
+
+for sorgente, destinazione, qualita in SORGENTI:
+    im = Image.open(sorgente).convert("RGB")
+    im.thumbnail((1400, 1400), Image.LANCZOS)
+    # Ricreare l'immagine dai soli pixel scarta ogni metadato, GPS compreso.
+    pulita = Image.new(im.mode, im.size)
+    pulita.putdata(list(im.getdata()))
+    pulita.save(destinazione, "JPEG", quality=qualita, optimize=True, progressive=True)
+    print(f"{destinazione}  {im.size[0]}x{im.size[1]}")
+EOF
 ls -la public/foto
 ```
+
+Then prove no metadata survived — this check is the point of the step:
+
+```bash
+python3 -c "
+from PIL import Image
+import glob, sys
+sporche = [f for f in glob.glob('public/foto/*.jpg') if dict(Image.open(f).getexif())]
+print('IMMAGINI CON EXIF:', sporche or 'nessuna — corretto')
+sys.exit(1 if sporche else 0)
+"
+```
+
+Nine images. `brocca-mentine`, `colori-tavola` and `ciondoli-cuore` are already
+below 1400px — `thumbnail()` leaves them untouched, which is correct; they are
+only ever rendered at roughly 300px in the gallery grid.
 
 Images are pre-sized because `images.unoptimized: true` means Next will not resize them. Each should land under ~250 KB.
 
@@ -2334,6 +2449,14 @@ export function Apertura({ locale }: { locale: Locale }) {
 	);
 }
 ```
+
+**Watch item carried from the Task 7 review.** The English route wraps `Pagina`
+in an unstyled `<div lang="en">` (nested layout), while the Italian route renders
+it as a direct child of `<body>`. Any layout that depends on being a direct child
+of `<body>` — `min-h-screen` paired with a parent-relative height, a `:first-child`
+selector, a top-level flex or grid context — will behave differently on `/en` than
+on `/`. Keep `Pagina`'s own root self-sufficient: it must not rely on its parent
+for height, display mode or child position. Verify both routes at both widths.
 
 - [ ] **Step 6: Assemble `src/components/Pagina.tsx`**
 
@@ -2650,14 +2773,44 @@ import type { Locale } from "@/lib/date";
 
 const FOTO = [
 	{
+		file: "/foto/mani-al-tornio.jpg",
+		it: "Le mani della ceramista al tornio, mentre alza una ciotola",
+		en: "The potter's hands at the wheel, throwing a bowl",
+	},
+	{
 		file: "/foto/gatti-grigi.jpg",
 		it: "Due tazze-gatto smaltate, grigie e bianche, impilate",
 		en: "Two stacked grey and white glazed cat cups",
 	},
 	{
+		file: "/foto/tettazza.jpg",
+		it: "Una tettazza: tazza scultura in ceramica smaltata rosa",
+		en: "A “tettazza” — a sculptural mug in pink glazed ceramic",
+	},
+	{
+		file: "/foto/tazze-foglie.jpg",
+		it: "Tazze in ceramica decorate con foglie di fragola dipinte a mano",
+		en: "Ceramic mugs decorated with hand-painted strawberry leaves",
+	},
+	{
 		file: "/foto/servizio-gatti.jpg",
 		it: "Servizio da caffè con gatti e zampine dipinti a mano",
 		en: "Coffee set with hand-painted cats and paw prints",
+	},
+	{
+		file: "/foto/brocca-mentine.jpg",
+		it: "Brocca in ceramica con foglie di menta impresse, fotografata tra la menta",
+		en: "Ceramic jug with impressed mint leaves, photographed among mint",
+	},
+	{
+		file: "/foto/colori-tavola.jpg",
+		it: "Servizio da tavola a righe verdi e rosse su tessuto blu",
+		en: "Green and red striped tableware on blue cloth",
+	},
+	{
+		file: "/foto/ciondoli-cuore.jpg",
+		it: "Due ciondoli a cuore in ceramica smaltata verde",
+		en: "Two heart pendants in green glazed ceramic",
 	},
 ] as const;
 
@@ -2671,7 +2824,7 @@ export function Galleria({ locale }: { locale: Locale }) {
 			</h2>
 			<p className="pt-2 font-testo text-lg text-sp-tenue">{d.qualcheSottotitolo}</p>
 
-			<div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+			<div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
 				{FOTO.map((f) => (
 					<Image
 						key={f.file}
@@ -2682,12 +2835,6 @@ export function Galleria({ locale }: { locale: Locale }) {
 						className="h-44 w-full rounded-sm object-cover sm:h-64 lg:h-72"
 					/>
 				))}
-				{/* Segnaposto visibile: servono ancora 8-10 foto dalla cliente. */}
-				<div className="col-span-2 flex h-44 items-center justify-center rounded-sm border border-dashed border-sp-bordo p-5 sm:h-64 lg:col-span-1 lg:h-72">
-					<p className="text-center font-display text-xs leading-relaxed text-sp-nota">
-						[SERVONO 8–10 FOTO]
-					</p>
-				</div>
 			</div>
 		</section>
 	);
@@ -2698,7 +2845,7 @@ export function Galleria({ locale }: { locale: Locale }) {
 
 ```tsx
 import { dizionari } from "@/content/dizionario";
-import { emailDaConfermare, sito } from "@/content/sito";
+import { sito } from "@/content/sito";
 import type { Locale } from "@/lib/date";
 import { Filo } from "./Filo";
 
@@ -2716,39 +2863,27 @@ export function Contatti({ locale }: { locale: Locale }) {
 					<p className="max-w-md font-testo text-lg leading-relaxed text-sp-testo">
 						{d.scrivimiTesto}
 					</p>
-					{emailDaConfermare ? (
-						<p className="font-display text-xl font-semibold text-sp-nota">{sito.email}</p>
-					) : (
-						<a
-							href={`mailto:${sito.email}`}
-							className="self-start font-display text-xl font-semibold text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
-						>
-							{sito.email}
-						</a>
-					)}
+					<a
+						href={`mailto:${sito.email}`}
+						className="self-start font-display text-xl font-semibold text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
+					>
+						{sito.email}
+					</a>
 				</div>
 
-				<ul className="flex flex-col gap-3 font-display text-base lg:flex-row lg:gap-7 lg:pb-1">
-					<li>
-						<a
-							href={sito.instagram}
-							target="_blank"
-							rel="me noreferrer"
-							className="inline-flex min-h-11 items-center text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
-						>
-							Instagram — @sandu_pottery
-						</a>
-					</li>
-					<li>
-						<a
-							href={sito.facebook}
-							target="_blank"
-							rel="me noreferrer"
-							className="inline-flex min-h-11 items-center text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
-						>
-							Facebook
-						</a>
-					</li>
+				<ul className="flex flex-col gap-3 font-display text-base lg:pb-1">
+					{sito.profili.map((profilo) => (
+						<li key={profilo.url}>
+							<a
+								href={profilo.url}
+								target="_blank"
+								rel="me noreferrer"
+								className="inline-flex min-h-11 items-center text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-4 hover:decoration-sp-terracotta"
+							>
+								Instagram — {profilo.etichetta}
+							</a>
+						</li>
+					))}
 				</ul>
 			</div>
 		</section>
@@ -2756,7 +2891,9 @@ export function Contatti({ locale }: { locale: Locale }) {
 }
 ```
 
-`min-h-11` is 44px — the mobile hit-target floor from the spec.
+`min-h-11` is 44px — the mobile hit-target floor from the spec. The two
+Instagram accounts stack rather than sitting side by side: `@sandu_pottery` and
+`@letettazze` are long enough together to crowd a phone row.
 
 - [ ] **Step 3: Write `src/components/PiePagina.tsx`**
 
@@ -2772,11 +2909,8 @@ export function PiePagina({ locale }: { locale: Locale }) {
 
 	return (
 		<footer className="mx-auto w-full max-w-5xl px-6 pb-14 pt-20 sm:px-10">
-			<div className="flex flex-col gap-2 border-t border-sp-bordo pt-5 font-display text-xs text-sp-nota sm:flex-row sm:justify-between">
+			<div className="border-t border-sp-bordo pt-5 font-display text-xs text-sp-nota">
 				<span>{riga}</span>
-				<span>
-					{sito.ragioneSociale} · {sito.partitaIva}
-				</span>
 			</div>
 		</footer>
 	);
@@ -2860,12 +2994,31 @@ git commit -m "feat: add gallery, contact and footer with json-ld"
 ```bash
 mkdir -p src/app
 # Icona quadrata su fondo porcellana, dal logo recuperato.
-qlmanage -t -s 512 -o /tmp public/logo.svg
-sips -s format png -z 512 512 --padColor FAF7F3 /tmp/logo.svg.png --out src/app/icon.png
+# Usa il marchio quadrato (la tazza vista dall'alto), non il logo esteso:
+# `docs/fonti-cliente/recuperate/marchio-tazza.png` è 717x617 e recuperato
+# dalla CDN del vecchio negozio. Niente `sips`: non toglie i metadati.
+python3 - <<'EOF'
+from PIL import Image
+
+marchio = Image.open("docs/fonti-cliente/recuperate/marchio-tazza.png").convert("RGBA")
+marchio.thumbnail((432, 432), Image.LANCZOS)
+tela = Image.new("RGBA", (512, 512), (250, 247, 243, 255))
+tela.paste(marchio, ((512 - marchio.width) // 2, (512 - marchio.height) // 2), marchio)
+pulita = Image.new("RGB", tela.size, (250, 247, 243))
+pulita.paste(tela, mask=tela.split()[3])
+pulita.save("src/app/icon.png", "PNG", optimize=True)
+print(f"icon.png 512x512 dal marchio {marchio.width}x{marchio.height}")
+EOF
 cp src/app/icon.png src/app/apple-icon.png
-# Immagine social 1200x630 dalla foto d'apertura.
-sips -s format jpeg -c 630 1200 -s formatOptions 78 \
-  public/foto/gatti-calico.jpg --out public/foto/og.jpg
+# Immagine social 1200x630 dalla foto d'apertura, senza metadati.
+python3 - <<'EOF'
+from PIL import Image, ImageOps
+
+im = ImageOps.fit(Image.open("public/foto/gatti-calico.jpg").convert("RGB"), (1200, 630), Image.LANCZOS)
+pulita = Image.new(im.mode, im.size)
+pulita.putdata(list(im.getdata()))
+pulita.save("public/foto/og.jpg", "JPEG", quality=82, optimize=True)
+EOF
 ls -la src/app/icon.png src/app/apple-icon.png public/foto/og.jpg
 ```
 
@@ -3030,13 +3183,14 @@ git commit -m "feat: add robots, sitemap, manifest, icons and open graph metadat
 
 - [ ] **Step 1: Write `AGENTS.md`**
 
+**Do not author the `<!-- BEGIN:nextjs-agent-rules -->` block.** Next 16 writes it
+itself on every `next dev` (see `node_modules/next/dist/server/lib/generate-agent-files.js`)
+and re-adds it if removed. It already exists in the working tree, along with a
+`CLAUDE.md` containing `@AGENTS.md`, both currently untracked. Append the sections
+below *after* the existing `<!-- END:nextjs-agent-rules -->` marker, leave the
+generated block untouched, and commit both files.
+
 ````markdown
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
-
 ## Project Context
 
 Temporary "lavori in corso" site for Sandu Pottery, an artisan potter in Bergamo, Italy. It replaces a cancelled Shopify store. Its job: show her work, list her craft-market dates, and give people a way to write. No shop, no cart, no shipping.
@@ -3077,6 +3231,7 @@ The permanent showcase site is a separate, later project.
 - **`.ics` `DTEND` is exclusive; schema.org `endDate` is inclusive.** They differ by one day on purpose. `tests/ics.test.ts` and `tests/jsonld.test.ts` both pin this.
 - **Bracketed placeholders (`[EMAIL DA CONFERMARE]`) are load-bearing.** They mark facts the client has not supplied. Never invent a value to remove one.
 - **The freshness script must stay inline and must stay after the markup it queries.** Moving it into a client component reintroduces a flash of stale dates.
+- **The English date label depends on Bun's bundled ICU.** `Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long" })` yields `"Thursday 24 September"` under Bun and `"Thursday, 24 September"` (with a comma) under Node's full-ICU. `tests/date.test.ts` pins the Bun form. If a Bun upgrade changes the CLDR data that test will fail — that is the alarm working, not a bug. Fix it by updating the expected string, or by composing the label from `formatToParts` if it starts churning. Never "fix" it by loosening the assertion.
 
 ## Adding a market date
 
@@ -3088,11 +3243,10 @@ See `docs/content-editing.md`. It is one edit to `src/content/mercati.ts` plus a
 | ------- | --------- | ---- |
 ````
 
-- [ ] **Step 2: Write `CLAUDE.md`**
+- [ ] **Step 2: Leave `CLAUDE.md` alone**
 
-```markdown
-@AGENTS.md
-```
+Next already generated it containing `@AGENTS.md`, which is exactly what this
+project wants. Do not rewrite it; just make sure it is committed.
 
 - [ ] **Step 3: Write `docs/content-editing.md`**
 
@@ -3219,13 +3373,151 @@ Copy spec §11 in full — the Aruba zone records, the cutover order, and the wa
 
 `README.md` covers: what the site is, the live URL, the stack, the four commands, where the calendar lives, and a prominent link to `docs/content-editing.md`. `LICENSE` is MIT with the client named as copyright holder. `CONTRIBUTING.md` states conventional commits and the four gates. `CODE_OF_CONDUCT.md` is Contributor Covenant 2.1. `SECURITY.md` gives a reporting address — use `[EMAIL DA CONFERMARE]` until the client supplies one.
 
-- [ ] **Step 8: Final verification of every gate**
+- [ ] **Step 8: Clear the two deferred minors from the Task 1 review**
+
+Four small items, none of them implementer deviations — three inherited from the
+template this repo mirrors, one a gap in the Task 3 brief's own test design:
+
+1. `.github/workflows/release.yml` — delete `packages: write` from the
+   `permissions:` block. The GHCR image build was dropped from this workflow, so
+   the scope grants a token permission nothing uses.
+2. `commitlint.config.mjs` — the conventional preset allows more types than this
+   project's eight. Pin them:
+
+```js
+export default {
+	extends: ["@commitlint/config-conventional"],
+	rules: {
+		"type-enum": [
+			2,
+			"always",
+			["feat", "fix", "chore", "ci", "docs", "style", "refactor", "perf"],
+		],
+	},
+};
+```
+
+Verify the restriction bites:
+
+```bash
+echo "test: should be rejected" | bunx commitlint
+```
+
+Expected: non-zero exit naming `type-enum`.
+
+3. `tests/mercati.test.ts` — the weekday-pattern test guards Bergamo Alta
+   (Sundays) and piazza Diaz (Thursdays) but not the third recurring market,
+   Bergamo Bassa at piazza Cavour, which is also always a Sunday. All three
+   current Cavour dates are correct, but a mistyped one added next season would
+   slip past the guard — and wrong dates are this project's highest-consequence
+   failure. Extend the existing loop:
+
+```ts
+			if (m.luogo.includes("piazza Cavour")) expect(giorno(m.inizio)).toBe(0);
+```
+
+   Verify it bites by temporarily changing one Cavour date to a Monday, running
+   `bun run test`, seeing it fail, then reverting.
+
+4. `src/content/sito.ts` — the two Instagram URLs disagree on the trailing slash
+   (`.../sandu_pottery/` vs `.../letettazze`). Normalise both to a trailing slash
+   so a later edit does not produce a pointless diff.
+
+5. `tests/date.test.ts` — the `eOggi` block tests "middle of a range" and "before
+   the start" but neither inclusive boundary, even though `eFuturo` tests its own.
+   Add both:
+
+```ts
+	test("vero il primo giorno", () => {
+		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-18")).toBe(true);
+	});
+
+	test("vero l'ultimo giorno", () => {
+		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-20")).toBe(true);
+	});
+```
+
+6. `src/lib/date.ts` — `raggruppaPerMese` only compares against the *last* group,
+   so a non-contiguous repeat of a month would produce two groups instead of one.
+   That is fine because callers pass sorted data, but the precondition is
+   undocumented. Amend the JSDoc:
+
+```ts
+/**
+ * Raggruppa per mese conservando l'ordine di arrivo.
+ * PRECONDIZIONE: `voci` deve essere già ordinato per `inizio`. Il confronto
+ * avviene solo con l'ultimo gruppo, quindi un mese che ricompare più avanti
+ * genererebbe un secondo gruppo invece di unirsi al primo.
+ */
+```
+
+7. `scripts/genera-ics.ts` — `mkdir(out/calendario, { recursive: true })` silently
+   creates `out/` too, so running the script standalone against a missing build
+   produces an orphaned `out/calendario` with no site around it. Fail loudly
+   instead:
+
+```ts
+	const { existsSync } = await import("node:fs");
+	if (!existsSync(join(process.cwd(), "out"))) {
+		throw new Error("out/ non esiste: esegui prima `next build`.");
+	}
+```
+
+8. `src/lib/ics.ts` — the `URL:` property is a URI, not a TEXT value, so it must
+   not be comma/semicolon-escaped. Harmless with today's data, wrong by RFC 5545.
+   Emit `URL:${e.url}` directly and note why in a comment.
+
+9. `src/lib/ics.ts` — this module uses the global `Buffer`, which exists in Bun
+   and Node but not in a browser. It is only ever imported by the post-build
+   script and its tests today. Add a comment saying so, so nobody imports
+   `creaICS` into a component and discovers it at runtime.
+
+10. `biome.json:18` — `"linter": { "rules": { "recommended": true } }` is
+    deprecated and prints an `info` on **every** lint run, in local runs and in
+    CI. Persistent noise is how people learn to stop reading lint output. Run
+    `bunx biome migrate --write`, then confirm the run is silent:
+
+```bash
+bun run lint
+```
+
+    Expected: `Checked N files`, and **no** "Found 1 info" line.
+
+11. `src/content/dizionario.ts` — `aggiungiAlCalendario` became unused when the
+    per-row calendar link moved onto the date itself. Remove the key from the
+    `Dizionario` type and both locales, then drop `tests/dizionario.test.ts`'s key
+    count from 21 back to 20. Run the suite and confirm it passes at 20 — if it
+    fails, the count and the type have drifted apart and that is worth knowing.
+
+12. `public/foto/og.jpg` — regenerate it from `mani-al-tornio.jpg` instead of
+    `gatti-calico.jpg`. Compared side by side at real link-preview size, the cat
+    photograph is a portrait composition forced into 1200×630 and loses the ears
+    to the crop, which reads as careless in a shared link; the wheel photograph
+    crops naturally and says "wheel-thrown by hand" to someone who has never met
+    her, which is exactly who a search-result preview reaches.
+
+```bash
+python3 - <<'EOF'
+from PIL import Image, ImageOps
+
+im = ImageOps.fit(Image.open("public/foto/mani-al-tornio.jpg").convert("RGB"), (1200, 630), Image.LANCZOS)
+pulita = Image.new(im.mode, im.size)
+pulita.putdata(list(im.getdata()))
+pulita.save("public/foto/og.jpg", "JPEG", quality=82, optimize=True)
+print(Image.open("public/foto/og.jpg").size, dict(Image.open("public/foto/og.jpg").getexif()) or "EXIF vuoto")
+EOF
+```
+
+    Then update the `alt` text in both routes' `openGraph.images` to describe the
+    wheel rather than the cats, in the matching language.
+
+- [ ] **Step 9: Final verification of every gate**
 
 ```bash
 bun install --frozen-lockfile
 bun run lint
 bunx tsc --noEmit
-bun test
+bun run test
 bun run build
 ls out/index.html out/en.html out/robots.txt out/sitemap.xml out/manifest.webmanifest
 ls out/calendario | wc -l
@@ -3233,7 +3525,7 @@ ls out/calendario | wc -l
 
 Expected: all green; 26 `.ics` files.
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
 git add -A
@@ -3244,14 +3536,20 @@ git commit -m "docs: add agent conventions, adr, brand system and runbooks"
 
 ## Blocked on the client — do not invent these
 
-These are **not** implementation tasks. They are handoffs, tracked here so nothing is silently forgotten:
+These are **not** implementation tasks. They are handoffs, tracked here so nothing is silently forgotten. As of Task 12, most of the list below has since been completed and is kept only as history — see the two live items marked outstanding:
 
-1. **Aruba credentials** → create the Cloudflare zone, replicate the mail records from `docs/dns-cloudflare.md`, verify, then switch nameservers.
-2. **Cloudflare account** → set repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, create the Pages project `sandupottery-lavori-in-corso`.
-3. **Public email** → replace `sito.email`; `emailDaConfermare` flips to `false` and the address becomes a `mailto:` link automatically.
-4. **Business name and P.IVA** → replace `sito.ragioneSociale` and `sito.partitaIva`.
-5. **8–10 photographs** (or her Shopify login, from which they can be exported) → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile.
-6. **GitHub org** → create it, push, and confirm the repo is public.
+1. ~~Aruba credentials → create the Cloudflare zone, replicate the mail records from `docs/dns-cloudflare.md`, verify, then switch nameservers.~~ **Done except the switch itself.** The zone is created and all mail records are replicated and verified DNS-only (see `docs/dns-cloudflare.md`). **Outstanding: the nameserver switch at Aruba** — deliberately not yet done, pending a deliberate cutover window.
+2. **Outstanding: Cloudflare Pages project and repo secrets.** The Cloudflare account already exists (it holds the zone from item 1) — it was never the blocker. What's left: create the Pages project `sandupottery-lavori-in-corso` in that account, and set repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` on `sandupottery/lavori-in-corso`.
+3. ~~8–10 photographs → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile.~~ **Done.** Eight photographs ship in `Galleria.tsx`; there is no placeholder tile.
+4. **GitHub org `sandupottery`** → it does not exist yet (`gh api orgs/sandupottery` returns 404). Create it, then push to `sandupottery/lavori-in-corso` and confirm the repo is public.
+
+**Naming, decided:**
+
+| Thing | Name | Why |
+| --- | --- | --- |
+| GitHub org | `sandupottery` | client's brand, chosen by the owner |
+| Repo | `lavori-in-corso` | the org already carries the brand, so the repo says what it *is*. When the permanent site replaces it, this repo archives under a name that explains itself. |
+| Cloudflare Pages project | `sandupottery-lavori-in-corso` | Pages projects are account-scoped and this account is personal, so the brand prefix keeps it identifiable. Leaves the bare `sandupottery` project name free for the permanent site. |
 
 ---
 

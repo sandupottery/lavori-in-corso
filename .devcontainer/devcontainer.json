@@ -1,0 +1,13 @@
+{
+	"name": "sandupottery-lavori-in-corso",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/bun:1": {}
+	},
+	"postCreateCommand": "bun install",
+	"customizations": {
+		"vscode": {
+			"extensions": ["biomejs.biome", "bradlc.vscode-tailwindcss"]
+		}
+	}
+}

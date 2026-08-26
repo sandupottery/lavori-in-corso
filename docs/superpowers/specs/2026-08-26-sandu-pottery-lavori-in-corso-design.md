@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-26
 **Status:** approved, ready for implementation planning
-**Repo:** new GitHub org for the client (name TBD at publish time), public
+**Repo:** `github.com/sandupottery/lavori-in-corso`, public
 
 ## 1. Problem
 
@@ -60,7 +60,7 @@ Recovered from the dead Shopify store's still-live CDN and cached HTML:
 
 - Old tagline: *"Creazioni in ceramica lavorate a mano e al tornio. Made with
   love from Bergamo, Italy"*
-- Instagram: `@sandu_pottery` · Facebook: `Sandupottery-100063684326940`
+- Instagram: `@sandu_pottery` and `@letettazze` — two accounts for the two halves of her work. Facebook existed but the client asked for it to be dropped.
 - Old collection taxonomy (three brand worlds): animals (`animali`, `cani`,
   `gattetazze`); bodies (`tettazze`, `corpi-segnati`, `corpi-creatori`);
   botanicals (`foglie`, `mentine`, `more`, `fragole`, `nasturzi`, `malve`)
@@ -68,13 +68,46 @@ Recovered from the dead Shopify store's still-live CDN and cached HTML:
 The Wayback Machine holds essentially nothing (3 URLs, no product pages, no CDN
 assets), so no further recovery is possible without the Shopify admin login.
 
-### Open content dependencies (blocking publish, not build)
+### Client answers received 2026-08-26
 
-| Item | Needed for | Placeholder in build |
+| Item | Answer |
+| --- | --- |
+| Public email | `info@sandupottery.com` — also her Shopify account address, so the mailbox is confirmed live on Aruba |
+| Social links | The two Instagram accounts only. Drop Facebook. |
+| P.IVA / company name | **Not published on this site.** The footer carries neither, and no placeholder stands in for them. |
+| Aruba access | Received. Unblocks the DNS work; still needs a Cloudflare account to migrate *to*. |
+| Shopify access | Password received, but 2FA is a passkey the client holds. The plan is cancelled with data retained for two years and reactivation offered at €1/month. |
+
+### Photographs — resolved without payment, 2026-08-26
+
+The client declined the €1 Shopify reactivation. Six further photographs plus a
+square logo mark were instead recovered from the dead store's still-live CDN, by
+extracting filenames from the archived homepage HTML and fetching them directly:
+
+| File | Source resolution | Subject |
 | --- | --- | --- |
-| Public email address | contact section, JSON-LD | `[EMAIL DA CONFERMARE]` |
-| Business name, P.IVA / C.F. | footer (Italian legal requirement) | `[RAGIONE SOCIALE · P.IVA]` |
-| 8–10 photographs | gallery | 3 supplied + marked placeholders |
+| `mani-al-tornio.jpg` | 3120×3112 | her hands at the wheel — the making |
+| `tazze-foglie.jpg` | 3120×4160 | strawberry-leaf mugs (`foglie`) |
+| `tettazza.jpg` | 3120×4160 | a *tettazza* (`tettazze`) |
+| `brocca-mentine.jpg` | 710×894 | mint-leaf jug (`mentine`) |
+| `colori-tavola.jpg` | 640×640 | striped tableware (`colori per la tavola`) |
+| `ciondoli-cuore.jpg` | 976×975 | heart pendants (`ciondoli`) |
+| `marchio-tazza.png` | 717×617 | the cup mark alone — favicon source |
+
+All seven carried EXIF, now stripped. With the client's three emailed photographs
+this makes nine, which fills the gallery and covers four of her collections plus a
+process shot. The placeholder tile is removed.
+
+This is the floor of what the CDN route can give: Shopify's CDN has no directory
+listing, product filenames carry UUIDs, and the Wayback Machine holds three URLs
+with no product pages. For the permanent site the complete free source is the
+client's own Instagram data export, which she can run on either account.
+
+### Still open (blocks publish, not build)
+
+| Item | Needed for | Status |
+| --- | --- | --- |
+| Cloudflare nameserver cutover | pointing the domain at Pages | zone created and corrected; awaiting go-ahead |
 
 ## 5. Design system
 
@@ -152,8 +185,8 @@ hero        eyebrow · H1 · intro · [next-market card] · photo
 rule
 mercatini   "Dove mi trovi" · two-column card (rhythm | dates)
 galleria    "Qualche pezzo" · photo grid
-contatti    "Scrivimi" · email · Instagram · Facebook
-footer      business name · P.IVA · credit
+contatti    "Scrivimi" · email · due account Instagram
+footer      nome e città · credit
 ```
 
 ### Hero — "Biglietto"
@@ -349,7 +382,10 @@ permanent site. The CDN still serves her files today; that will not last.
 - All text/background pairs meet WCAG AA; `rosa` and `glassa` are barred from
   text by token documentation and never used for it.
 - Interactive targets ≥ 44px on mobile.
-- `lang` set correctly per route; `hreflang` on both.
+- `lang` set correctly per route — as shipped, `<html lang>` is `"it"` on
+  both routes (the `/en` route nests its content in a `<div lang="en">`
+  instead of a second root layout); `hreflang` on both. See ADR-001's
+  routing decision for why this was accepted rather than fixed.
 - `prefers-reduced-motion` disables the fade-up.
 - Images checked in pre-optimised; `next/image` runs `unoptimized` under static
   export, so sizing is the author's responsibility.
@@ -381,15 +417,21 @@ docs/superpowers/specs/       this document
 | Nameserver change breaks her email | Replicate and verify the full zone before switching (§11) |
 | Gallery has too few photographs | Blocked on her Shopify login or 8–10 new photos; build ships with marked placeholders until then |
 | Calendar empties after Dec 2026 | Explicit empty state copy (§7) |
-| Client cannot supply P.IVA in time | Footer ships with a marked placeholder; page still goes live |
-| Shopify CDN goes dark before export | Logo and OG image already saved to `brand-assets/`; prioritise the Shopify login ask |
+| Shopify data purged after the two-year retention window | Logo and OG image already saved; reactivating at €1/month is the cheap recovery path and needs the client's passkey |
+| `info@sandupottery.com` breaks during the DNS cutover | It is the confirmed live mailbox — verify delivery to it specifically, before and after the nameserver switch |
 
 ## 15. Open questions
 
+**Superseded by §4** — both items below were resolved after this section was
+written; §4 ("Recovered assets and facts") has the current state of the
+Cloudflare account and the photographs, and should be read instead of this
+list. Kept here only as history.
+
 None blocking implementation. Two blocking publish:
 
-1. Cloudflare access, which depends on the Aruba credentials.
-2. Email address, business details, and photographs from the client.
+1. **A Cloudflare account to migrate to.** The Aruba credentials are in hand, but
+   they only let us change nameservers — there must be a destination zone first.
+2. **Photographs.** Three are in hand; the gallery wants 8–10.
 
-The build proceeds with visibly marked placeholders for all three, and shows
-locally before anything is published.
+The build proceeds with a visibly marked placeholder tile for the missing
+photographs, and is shown locally before anything is published.
