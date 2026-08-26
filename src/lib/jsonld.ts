@@ -66,5 +66,5 @@ export function graficoJsonLd(mercati: readonly Mercato[], locale: Locale): stri
 		"@context": "https://schema.org",
 		"@graph": [costruisciAttivita(locale), ...costruisciEventi(mercati, locale)],
 	};
-	return JSON.stringify(grafo).replace(/</g, "\\u003c");
+	return JSON.stringify(grafo);
 }

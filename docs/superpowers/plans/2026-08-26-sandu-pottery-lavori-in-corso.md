@@ -1853,8 +1853,25 @@ describe("graficoJsonLd", () => {
 		expect((analizzato["@graph"] as unknown[]).length).toBe(2);
 	});
 
-	test("non contiene < che possa chiudere il tag script", () => {
-		expect(graficoJsonLd([unGiorno], "it")).not.toContain("<");
+	test("neutralizza i < che potrebbero chiudere il tag script", () => {
+		// La fixture DEVE contenere un < reale: senza, l'asserzione passerebbe
+		// anche cancellando l'escape, che è esattamente ciò che deve impedire.
+		const ostile: Mercato = {
+			id: "2026-09-24-ostile",
+			inizio: "2026-09-24",
+			citta: "Milano",
+			luogo: "</script><script>alert(1)</script>",
+			mappa: "https://www.google.com/maps/search/?api=1&query=x",
+		};
+		const grafo = graficoJsonLd([ostile], "it");
+		expect(grafo).not.toContain("<");
+		expect(grafo).toContain("\\u003c");
+		// L'escape protegge l'HTML, non deve corrompere il dato: ri-analizzato
+		// il valore torna identico. Uno "strip" passerebbe le due righe sopra.
+		const analizzato = JSON.parse(grafo) as { "@graph": Record<string, unknown>[] };
+		const evento = analizzato["@graph"].find((n) => n["@type"] === "Event");
+		const luogo = evento?.location as Record<string, unknown>;
+		expect(luogo.name).toBe("</script><script>alert(1)</script>");
 	});
 });
 ```
@@ -1946,7 +1963,7 @@ Note the asymmetry, and do not "fix" it: `.ics` `DTEND` is **exclusive** (day af
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `bun test tests/jsonld.test.ts`
-Expected: PASS — 11 tests.
+Expected: PASS — 11 tests. Then delete `.replace(/</g, "\\u003c")` from `src/lib/jsonld.ts`, re-run, and confirm this one test FAILS before restoring it. A guard nobody has watched fail is not yet a guard.
 
 - [ ] **Step 5: Commit**
 

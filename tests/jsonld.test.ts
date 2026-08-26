@@ -20,6 +20,14 @@ const dueGiorni: Mercato = {
 	mappa: "https://www.google.com/maps/search/?api=1&query=x",
 };
 
+const ostile: Mercato = {
+	id: "2026-09-24-ostile",
+	inizio: "2026-09-24",
+	citta: "Milano",
+	luogo: "</script><script>alert(1)</script>",
+	mappa: "https://www.google.com/maps/search/?api=1&query=x",
+};
+
 describe("costruisciEventi", () => {
 	test("produce un Event per mercato", () => {
 		expect(costruisciEventi([unGiorno, dueGiorni], "it").length).toBe(2);
@@ -92,7 +100,15 @@ describe("graficoJsonLd", () => {
 		expect((analizzato["@graph"] as unknown[]).length).toBe(2);
 	});
 
-	test("non contiene < che possa chiudere il tag script", () => {
-		expect(graficoJsonLd([unGiorno], "it")).not.toContain("<");
+	test("neutralizza i < che potrebbero chiudere il tag script", () => {
+		const grafo = graficoJsonLd([ostile], "it");
+		expect(grafo).not.toContain("<");
+		expect(grafo).toContain("\\u003c");
+		// Il valore deve sopravvivere intatto una volta ri-analizzato:
+		// l'escape serve a proteggere l'HTML, non a corrompere i dati.
+		const analizzato = JSON.parse(grafo) as { "@graph": Record<string, unknown>[] };
+		const evento = analizzato["@graph"].find((n) => n["@type"] === "Event");
+		const luogo = evento?.location as Record<string, unknown>;
+		expect(luogo.name).toBe("</script><script>alert(1)</script>");
 	});
 });
