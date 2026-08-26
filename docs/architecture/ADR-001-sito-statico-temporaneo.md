@@ -92,6 +92,18 @@ routes are pre-rendered anyway.
   `Dizionario`, not a routing change.
 - `hreflang` and sitemap entries are static and trivially correct — there is no
   runtime negotiation to get wrong.
+- **`<html lang>` is `"it"` on both routes.** `/en` is a nested layout
+  (`src/app/en/layout.tsx`) that wraps its content in `<div lang="en">`
+  rather than a second root `<html>` — the App Router only emits one `<html>`
+  per route tree here, and the shared root layout owns it. Content inside the
+  `/en` page correctly inherits `lang="en"` for assistive tech, so the
+  practical gap is narrower than it sounds: it's the document-level signal —
+  `<head>` and crawler/browser language detection — that stays Italian on the
+  English route. Fixing this properly means route groups with independent
+  root layouts, which touches the same page tree that
+  `ScriptFreschezza.tsx`'s placement depends on (Decision 3) — not a change
+  to make under this deadline for a cosmetic SEO/a11y gap. Accepted as a
+  known trade-off; candidate fix for the permanent site.
 
 ## Decision 3: Parse-time inline script for date filtering, not React
 
@@ -180,10 +192,18 @@ failures rather than anticipated up front:
    correctly filtered, then reverted to showing expired dates a moment later,
    because React had quietly rebuilt the subtree without the script's
    `hidden` attribute. `element.style` is invisible to this mechanism only
-   because none of the components involved (`Mercatini.tsx` and its children)
-   pass a `style` prop, so React never claims ownership of that channel. Two
-   rounds of debugging were spent finding this; see the full rule and the list
-   of `data-*` attributes involved in `AGENTS.md`.
+   because none of the components involved — `Mercatini.tsx` and its
+   children, **and also `Apertura.tsx` and `CartaProssimo.tsx`, which
+   `Apertura.tsx` renders and which is not a child of `Mercatini`** — pass a
+   `style` prop, so React never claims ownership of that channel. The two
+   halves of the script are mirror images of each other: in the calendar
+   list (`Mercatini.tsx`) the script *hides* rows that default to visible; in
+   the hero card (`CartaProssimo.tsx`, under `Apertura.tsx`) it *reveals* the
+   matching entry, which defaults to hidden, and hides the empty-state
+   fallback, which defaults to visible. Both directions are correct and
+   intentional — see the `[data-nessun-prossimo]` comment in `globals.css`.
+   Two rounds of debugging were spent finding this; see the full rule and the
+   list of `data-*` attributes involved in `AGENTS.md`.
 
 ### Derived states, verbatim from spec §7
 
@@ -203,9 +223,23 @@ failures rather than anticipated up front:
   `data-*` attribute, adding a wrapper `<div>` with its own `style` prop between
   the script and the rows it queries) risks silently breaking it in a way no
   test currently catches — see `AGENTS.md` › "Rules that will bite you".
-- The site works with JavaScript disabled or blocked, just showing every date
-  including expired ones — a degraded but non-broken state, which was an
-  explicit design goal ("independent of whether the JS bundle ever loads").
+- The site works with JavaScript disabled or blocked, but the two consumers
+  degrade in opposite, both-deliberate directions. The calendar list
+  (`Mercatini.tsx`) degrades to showing every date, including expired ones —
+  the CSS default is visible, and with the script inert nothing hides the
+  stale rows. The hero card (`CartaProssimo.tsx`) degrades the other way: its
+  CSS defaults leave every `[data-voce-prossimo]` entry hidden and
+  `[data-nessun-prossimo]` visible, so with the script inert the card always
+  reads the empty-state copy ("Le date del prossimo anno arrivano presto…"),
+  even when current markets exist. This is deliberate, not a bug: the
+  alternative default (show *some* date without the script able to check
+  whether it's still current) risks showing a wrong, expired market date as
+  if it were upcoming, and a wrong date is worse than no date. In practice
+  this makes the hero card the freshness script's most fragile consumer —
+  its no-JS fallback is silent understatement (says nothing's coming when
+  something is) rather than the calendar's silent overstatement (keeps
+  showing what's already passed), and only the script running correctly
+  makes either one accurate.
 
 ## Decision 4: One content model feeds the page, the JSON-LD, and the `.ics` files
 

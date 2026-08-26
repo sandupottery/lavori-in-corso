@@ -382,7 +382,10 @@ permanent site. The CDN still serves her files today; that will not last.
 - All text/background pairs meet WCAG AA; `rosa` and `glassa` are barred from
   text by token documentation and never used for it.
 - Interactive targets ≥ 44px on mobile.
-- `lang` set correctly per route; `hreflang` on both.
+- `lang` set correctly per route — as shipped, `<html lang>` is `"it"` on
+  both routes (the `/en` route nests its content in a `<div lang="en">`
+  instead of a second root layout); `hreflang` on both. See ADR-001's
+  routing decision for why this was accepted rather than fixed.
 - `prefers-reduced-motion` disables the fade-up.
 - Images checked in pre-optimised; `next/image` runs `unoptimized` under static
   export, so sizing is the author's responsibility.
@@ -418,6 +421,11 @@ docs/superpowers/specs/       this document
 | `info@sandupottery.com` breaks during the DNS cutover | It is the confirmed live mailbox — verify delivery to it specifically, before and after the nameserver switch |
 
 ## 15. Open questions
+
+**Superseded by §4** — both items below were resolved after this section was
+written; §4 ("Recovered assets and facts") has the current state of the
+Cloudflare account and the photographs, and should be read instead of this
+list. Kept here only as history.
 
 None blocking implementation. Two blocking publish:
 
