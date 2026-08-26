@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-26
 **Status:** approved, ready for implementation planning
-**Repo:** new GitHub org for the client (name TBD at publish time), public
+**Repo:** `github.com/sandupottery/lavori-in-corso`, public
 
 ## 1. Problem
 

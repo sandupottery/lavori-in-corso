@@ -3325,7 +3325,15 @@ These are **not** implementation tasks. They are handoffs, tracked here so nothi
 1. **Aruba credentials** → create the Cloudflare zone, replicate the mail records from `docs/dns-cloudflare.md`, verify, then switch nameservers.
 2. **Cloudflare account** → set repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, create the Pages project `sandupottery-lavori-in-corso`.
 3. **8–10 photographs** → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile. The Shopify store is cancelled but its data is retained for two years, so reactivating at €1/month is the cheapest route to the full catalogue — that requires the client's passkey and is hers to do.
-4. **GitHub org** → create it, push, and confirm the repo is public.
+4. **GitHub org `sandupottery`** → it does not exist yet (`gh api orgs/sandupottery` returns 404). Create it, then push to `sandupottery/lavori-in-corso` and confirm the repo is public.
+
+**Naming, decided:**
+
+| Thing | Name | Why |
+| --- | --- | --- |
+| GitHub org | `sandupottery` | client's brand, chosen by the owner |
+| Repo | `lavori-in-corso` | the org already carries the brand, so the repo says what it *is*. When the permanent site replaces it, this repo archives under a name that explains itself. |
+| Cloudflare Pages project | `sandupottery-lavori-in-corso` | Pages projects are account-scoped and this account is personal, so the brand prefix keeps it identifiable. Leaves the bare `sandupottery` project name free for the permanent site. |
 
 ---
 
