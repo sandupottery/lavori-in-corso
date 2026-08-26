@@ -14,6 +14,10 @@ opening a public issue.
 
 **Email:** info@sandupottery.com
 
+That inbox is the potter's public customer address; reports sent there are
+forwarded to the maintainer. If you'd rather reach the maintainer directly,
+see the repository's commit history or GitHub profile for contact details.
+
 Include, as far as you can:
 
 - What you found and where (file, URL, or DNS record)
