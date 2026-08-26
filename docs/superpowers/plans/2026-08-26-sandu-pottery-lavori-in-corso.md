@@ -3266,7 +3266,8 @@ Copy spec §11 in full — the Aruba zone records, the cutover order, and the wa
 
 - [ ] **Step 8: Clear the two deferred minors from the Task 1 review**
 
-Both are one-liners inherited from the template this repo mirrors:
+Four small items, none of them implementer deviations — three inherited from the
+template this repo mirrors, one a gap in the Task 3 brief's own test design:
 
 1. `.github/workflows/release.yml` — delete `packages: write` from the
    `permissions:` block. The GHCR image build was dropped from this workflow, so
@@ -3294,6 +3295,24 @@ echo "test: should be rejected" | bunx commitlint
 ```
 
 Expected: non-zero exit naming `type-enum`.
+
+3. `tests/mercati.test.ts` — the weekday-pattern test guards Bergamo Alta
+   (Sundays) and piazza Diaz (Thursdays) but not the third recurring market,
+   Bergamo Bassa at piazza Cavour, which is also always a Sunday. All three
+   current Cavour dates are correct, but a mistyped one added next season would
+   slip past the guard — and wrong dates are this project's highest-consequence
+   failure. Extend the existing loop:
+
+```ts
+			if (m.luogo.includes("piazza Cavour")) expect(giorno(m.inizio)).toBe(0);
+```
+
+   Verify it bites by temporarily changing one Cavour date to a Monday, running
+   `bun run test`, seeing it fail, then reverting.
+
+4. `src/content/sito.ts` — the two Instagram URLs disagree on the trailing slash
+   (`.../sandu_pottery/` vs `.../letettazze`). Normalise both to a trailing slash
+   so a later edit does not produce a pointless diff.
 
 - [ ] **Step 9: Final verification of every gate**
 
