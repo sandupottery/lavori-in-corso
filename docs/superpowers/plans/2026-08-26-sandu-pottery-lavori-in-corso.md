@@ -3075,13 +3075,14 @@ git commit -m "feat: add robots, sitemap, manifest, icons and open graph metadat
 
 - [ ] **Step 1: Write `AGENTS.md`**
 
+**Do not author the `<!-- BEGIN:nextjs-agent-rules -->` block.** Next 16 writes it
+itself on every `next dev` (see `node_modules/next/dist/server/lib/generate-agent-files.js`)
+and re-adds it if removed. It already exists in the working tree, along with a
+`CLAUDE.md` containing `@AGENTS.md`, both currently untracked. Append the sections
+below *after* the existing `<!-- END:nextjs-agent-rules -->` marker, leave the
+generated block untouched, and commit both files.
+
 ````markdown
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
-
 ## Project Context
 
 Temporary "lavori in corso" site for Sandu Pottery, an artisan potter in Bergamo, Italy. It replaces a cancelled Shopify store. Its job: show her work, list her craft-market dates, and give people a way to write. No shop, no cart, no shipping.
@@ -3133,11 +3134,10 @@ See `docs/content-editing.md`. It is one edit to `src/content/mercati.ts` plus a
 | ------- | --------- | ---- |
 ````
 
-- [ ] **Step 2: Write `CLAUDE.md`**
+- [ ] **Step 2: Leave `CLAUDE.md` alone**
 
-```markdown
-@AGENTS.md
-```
+Next already generated it containing `@AGENTS.md`, which is exactly what this
+project wants. Do not rewrite it; just make sure it is committed.
 
 - [ ] **Step 3: Write `docs/content-editing.md`**
 
