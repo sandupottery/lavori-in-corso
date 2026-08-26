@@ -21,24 +21,33 @@ that their email bounced or never arrived, which could be hours or days later.
 
 Do not redo this work — it is already done. What remains is nameserver-level.
 
-- [x] Cloudflare zone for `sandupottery.com` created. Status: `pending`
-  (this is normal and expected until nameservers are switched — it does not
-  mean something is wrong).
-- [x] All 31 records from the Aruba zone, including every mail record below,
-  replicated into the Cloudflare zone.
-- [x] All 31 mail-related records set to **DNS-only, TTL 300** (short TTL is
-  deliberate — it keeps rollback fast if something needs correcting right
-  after cutover; raise it back to a normal TTL, e.g. 3600+, once the cutover
-  has been stable for a few days).
+- [x] Cloudflare zone for `sandupottery.com` created, in the Cloudflare
+  account that will also host the Pages project. Status: `pending` (this is
+  normal and expected until nameservers are switched — it does not mean
+  something is wrong).
+- [x] All records from the Aruba zone (40 total) replicated into the
+  Cloudflare zone, including every mail record below.
+- [x] **31 mail records set to DNS-only (of 40 total in the zone), TTL 300**
+  (short TTL is deliberate — it keeps rollback fast if something needs
+  correcting right after cutover; raise it back to a normal TTL, e.g. 3600+,
+  once the cutover has been stable for a few days). This is the canonical
+  count for this document — later mentions of "the mail records" refer back
+  to this line rather than restating a number.
 - [ ] **Not yet done: nameservers at Aruba still point to the original Aruba
   nameservers.** Cloudflare's nameservers have not been activated. The domain
   is, right now, still fully served by Aruba — Cloudflare's copy of the zone
-  is inert until the nameserver switch happens.
+  is inert until the nameserver switch happens. This is deliberately not yet
+  done — see the cutover order below.
 - [ ] **Not yet done: Cloudflare Pages project `sandupottery-lavori-in-corso`
-  not yet connected to this domain**, and repo secrets
-  `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` not yet set (blocked on a
-  Cloudflare account — see the "Blocked on the client" list in the Task 12
-  brief).
+  not yet created**, and repo secrets `CLOUDFLARE_API_TOKEN` /
+  `CLOUDFLARE_ACCOUNT_ID` not yet set on `sandupottery/lavori-in-corso`. The
+  zone already exists in an account — the Pages project just needs creating
+  in that same account, and the two secrets need setting. Neither is blocked
+  on the client; both are outstanding work items, tracked in the "Blocked on
+  the client" list in
+  [`docs/superpowers/plans/2026-08-26-sandu-pottery-lavori-in-corso.md`](superpowers/plans/2026-08-26-sandu-pottery-lavori-in-corso.md)
+  alongside the one item that genuinely is blocked (the nameserver switch,
+  which needs the Aruba panel credentials below).
 
 So: the destination zone is built and verified-replicable, but the switch has
 not been thrown. This is the safe, correct state to be in before a deliberate,
@@ -133,10 +142,10 @@ zone (they are assigned per-account, not a fixed pair) — do not guess a
 Blocking for the nameserver switch itself: Aruba panel login (username /
 customer code + password), and which phone or email receives any 2FA code the
 panel requires. The exact list of live `@sandupottery.com` mailboxes, so none
-are broken by an oversight in the record replication (30 mail records were
-identified and replicated from the visible zone; there is no guarantee that is
-the complete list of every mailbox ever created). Her mailbox password is
-**not** needed for any of this.
+are broken by an oversight in the record replication (the mail records
+identified and replicated are listed in the status section above; there is no
+guarantee that is the complete list of every mailbox ever created). Her
+mailbox password is **not** needed for any of this.
 
 Non-blocking but time-sensitive: the Shopify admin login. Even on the cancelled
 plan, the admin still allows a product CSV and image export — this is the
