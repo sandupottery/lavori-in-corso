@@ -3158,6 +3158,7 @@ The permanent showcase site is a separate, later project.
 - **`.ics` `DTEND` is exclusive; schema.org `endDate` is inclusive.** They differ by one day on purpose. `tests/ics.test.ts` and `tests/jsonld.test.ts` both pin this.
 - **Bracketed placeholders (`[EMAIL DA CONFERMARE]`) are load-bearing.** They mark facts the client has not supplied. Never invent a value to remove one.
 - **The freshness script must stay inline and must stay after the markup it queries.** Moving it into a client component reintroduces a flash of stale dates.
+- **The English date label depends on Bun's bundled ICU.** `Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long" })` yields `"Thursday 24 September"` under Bun and `"Thursday, 24 September"` (with a comma) under Node's full-ICU. `tests/date.test.ts` pins the Bun form. If a Bun upgrade changes the CLDR data that test will fail — that is the alarm working, not a bug. Fix it by updating the expected string, or by composing the label from `formatToParts` if it starts churning. Never "fix" it by loosening the assertion.
 
 ## Adding a market date
 
@@ -3348,6 +3349,34 @@ Expected: non-zero exit naming `type-enum`.
 4. `src/content/sito.ts` — the two Instagram URLs disagree on the trailing slash
    (`.../sandu_pottery/` vs `.../letettazze`). Normalise both to a trailing slash
    so a later edit does not produce a pointless diff.
+
+5. `tests/date.test.ts` — the `eOggi` block tests "middle of a range" and "before
+   the start" but neither inclusive boundary, even though `eFuturo` tests its own.
+   Add both:
+
+```ts
+	test("vero il primo giorno", () => {
+		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-18")).toBe(true);
+	});
+
+	test("vero l'ultimo giorno", () => {
+		expect(eOggi({ inizio: "2026-12-18", fine: "2026-12-20" }, "2026-12-20")).toBe(true);
+	});
+```
+
+6. `src/lib/date.ts` — `raggruppaPerMese` only compares against the *last* group,
+   so a non-contiguous repeat of a month would produce two groups instead of one.
+   That is fine because callers pass sorted data, but the precondition is
+   undocumented. Amend the JSDoc:
+
+```ts
+/**
+ * Raggruppa per mese conservando l'ordine di arrivo.
+ * PRECONDIZIONE: `voci` deve essere già ordinato per `inizio`. Il confronto
+ * avviene solo con l'ultimo gruppo, quindi un mese che ricompare più avanti
+ * genererebbe un secondo gruppo invece di unirsi al primo.
+ */
+```
 
 - [ ] **Step 9: Final verification of every gate**
 
