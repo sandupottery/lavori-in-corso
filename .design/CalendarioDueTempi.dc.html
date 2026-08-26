@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&display=swap">
+  <style>
+    body { margin: 0; background: #FAF7F3; }
+    a { color: #9A4526; } a:hover { color: #C2603A; }
+    .q { font-family: Quicksand, "Century Gothic", "Avenir Next", sans-serif; }
+    .n { font-family: Newsreader, "Iowan Old Style", Georgia, serif; }
+    .mese { font-family: Quicksand, "Century Gothic", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526; }
+    .giorno { font-family: Quicksand, "Century Gothic", sans-serif; font-size: 14px; font-weight: 600; color: #241F1C; white-space: nowrap; }
+    .luogo { font-family: Newsreader, Georgia, serif; font-size: 15px; color: #4A423D; line-height: 1.4; }
+    .riga { display: flex; align-items: baseline; gap: 9px; }
+  </style>
+</helmet>
+
+<div style="width: 740px; box-sizing: border-box; background: #FAF7F3; padding: 22px 22px 26px; display: flex; flex-direction: column; gap: 16px;">
+
+  <div class="q" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Due tempi &mdash; il ritmo fisso e le date (in Main)</div>
+
+  <div style="background: #EDE3D6; border-radius: 4px; padding: 30px 34px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 36px;">
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="mese">Ogni mese, sempre</div>
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div><div class="giorno">Bergamo Bassa</div><div class="luogo">la 2ª domenica &mdash; da marzo a giugno, e da ottobre a dicembre</div></div>
+        <div><div class="giorno">Bergamo Alta</div><div class="luogo">la 4ª domenica &mdash; da aprile a giugno, e da settembre a dicembre</div></div>
+        <div><div class="giorno">Milano, piazza Diaz</div><div class="luogo">il 4° giovedì di ogni mese</div></div>
+      </div>
+      <div class="n" style="font-size: 14px; font-style: italic; color: #6E645B; line-height: 1.5; padding-top: 4px;">Queste non cambiano mai: se sei di Bergamo, sai già dove trovarmi.</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 18px; border-left: 1px solid #DFD1BF; padding-left: 36px;">
+      <div class="mese">Prossime date</div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="q" style="font-size: 15px; font-weight: 700; color: #241F1C;">Settembre</div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">19&ndash;20</span> <span class="luogo">L&rsquo;isola che c&rsquo;è &mdash; Villa Guardia (CO)</span></div></div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">24</span> <span class="luogo">Milano, piazza Diaz</span></div></div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">27</span> <span class="luogo">Bergamo Alta, Colle Aperto</span></div></div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="q" style="font-size: 15px; font-weight: 700; color: #241F1C;">Ottobre</div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">10</span> <span class="luogo">Milano, piazza XXIV Maggio (Darsena)</span></div></div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">11</span> <span class="luogo">Bergamo centro, piazza Cavour</span></div></div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">14&ndash;15</span> <span class="luogo">Milano, corso Garibaldi (MM Moscova)</span></div></div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">17</span> <span class="luogo">Monza, corso Italia</span></div></div>
+        <div class="riga"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="flex:none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">18</span> <span class="luogo">Milano, Baggio</span></div></div>
+      </div>
+
+      <div class="n" style="font-size: 15px; font-style: italic; color: #6E645B;">…e altre 17 date fino a fine dicembre</div>
+    </div>
+
+  </div>
+
+  <div class="n" style="font-size: 14px; line-height: 1.55; color: #5B534E; text-wrap: pretty;"><strong class="q" style="font-weight: 600; color: #241F1C;">Perché sì:</strong> separa le due domande diverse che si fa chi arriva &mdash; &ldquo;c&rsquo;è un posto fisso vicino a me?&rdquo; e &ldquo;cosa c&rsquo;è a breve?&rdquo; &mdash; invece di mescolarle. Il ritmo fisso non scade mai, le date sì. <strong class="q" style="font-weight: 600; color: #241F1C;">Costo:</strong> su telefono le due colonne si impilano, quindi il ritmo fisso va prima delle date e qualcuno lo scorrerà via.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&display=swap">
+  <style>
+    body { margin: 0; background: #FAF7F3; }
+    a { color: #9A4526; } a:hover { color: #C2603A; }
+    .q { font-family: Quicksand, "Century Gothic", "Avenir Next", sans-serif; }
+    .n { font-family: Newsreader, "Iowan Old Style", Georgia, serif; }
+    .data { font-family: Quicksand, "Century Gothic", sans-serif; font-size: 13px; font-weight: 600; color: #5B534E; text-align: right; white-space: nowrap; }
+    .posto { font-family: Newsreader, Georgia, serif; font-size: 16px; color: #241F1C; line-height: 1.4; }
+  </style>
+</helmet>
+
+<div style="width: 740px; box-sizing: border-box; background: #FAF7F3; padding: 22px 22px 26px; display: flex; flex-direction: column; gap: 16px;">
+
+  <div class="q" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Agenda &mdash; filo verticale, come un diario</div>
+
+  <div style="background: #EDE3D6; border-radius: 4px; padding: 30px 34px; display: flex; flex-direction: column; gap: 22px;">
+
+    <div class="q" style="font-size: 26px; font-weight: 600; color: #241F1C;">Dove mi trovi</div>
+
+    <div style="position: relative; display: flex; flex-direction: column; gap: 0;">
+      <div style="position: absolute; left: 96px; top: 8px; bottom: 8px; width: 1px; background: #DFD1BF;"></div>
+
+      <div style="display: flex; align-items: center; gap: 0; padding: 8px 0 14px;">
+        <div style="width: 84px;"></div>
+        <div style="width: 25px; display: flex; justify-content: center;"><div style="width: 9px; height: 9px; border-radius: 50%; background: #EDE3D6; border: 1px solid #DFD1BF;"></div></div>
+        <div class="q" style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Settembre</div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 10px 0;">
+        <div class="data" style="width: 84px;">sab 19 &ndash; dom 20</div>
+        <div style="width: 25px; display: flex; justify-content: center; padding-top: 3px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="background: #EDE3D6;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg></div>
+        <div class="posto" style="flex: 1 1 0; padding-left: 10px;">L&rsquo;isola che c&rsquo;è, Parco comunale <span style="color: #5B534E;">&mdash; Villa Guardia (CO)</span></div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 10px 0;">
+        <div class="data" style="width: 84px;">gio 24</div>
+        <div style="width: 25px; display: flex; justify-content: center; padding-top: 3px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="background: #EDE3D6;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg></div>
+        <div class="posto" style="flex: 1 1 0; padding-left: 10px;">Milano, piazza Diaz <span class="n" style="font-style: italic; font-size: 14px; color: #6E645B;">&mdash; ogni 4° giovedì</span></div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 10px 0;">
+        <div class="data" style="width: 84px;">dom 27</div>
+        <div style="width: 25px; display: flex; justify-content: center; padding-top: 3px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="background: #EDE3D6;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg></div>
+        <div class="posto" style="flex: 1 1 0; padding-left: 10px;">Bergamo Alta, Colle Aperto <span class="n" style="font-style: italic; font-size: 14px; color: #6E645B;">&mdash; ogni 4ª domenica</span></div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0; padding: 16px 0 14px;">
+        <div style="width: 84px;"></div>
+        <div style="width: 25px; display: flex; justify-content: center;"><div style="width: 9px; height: 9px; border-radius: 50%; background: #EDE3D6; border: 1px solid #DFD1BF;"></div></div>
+        <div class="q" style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Ottobre</div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 10px 0;">
+        <div class="data" style="width: 84px;">sab 10</div>
+        <div style="width: 25px; display: flex; justify-content: center; padding-top: 3px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="background: #EDE3D6;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg></div>
+        <div class="posto" style="flex: 1 1 0; padding-left: 10px;">Milano, piazza XXIV Maggio <span style="color: #5B534E;">(Darsena)</span></div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 10px 0;">
+        <div class="data" style="width: 84px;">dom 11</div>
+        <div style="width: 25px; display: flex; justify-content: center; padding-top: 3px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="background: #EDE3D6;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg></div>
+        <div class="posto" style="flex: 1 1 0; padding-left: 10px;">Bergamo centro, piazza Cavour <span class="n" style="font-style: italic; font-size: 14px; color: #6E645B;">&mdash; ogni 2ª domenica</span></div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 10px 0;">
+        <div class="data" style="width: 84px;">mer 14 &ndash; gio 15</div>
+        <div style="width: 25px; display: flex; justify-content: center; padding-top: 3px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="#C2603A" style="background: #EDE3D6;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg></div>
+        <div class="posto" style="flex: 1 1 0; padding-left: 10px;">Milano, corso Garibaldi <span style="color: #5B534E;">(MM Moscova)</span></div>
+      </div>
+
+      <div style="display: flex; align-items: flex-start; padding: 14px 0 4px;">
+        <div style="width: 84px;"></div>
+        <div style="width: 25px;"></div>
+        <div class="n" style="flex: 1 1 0; padding-left: 10px; font-size: 15px; font-style: italic; color: #6E645B;">…e altre 19 date fino a fine dicembre</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="n" style="font-size: 14px; line-height: 1.55; color: #5B534E; text-wrap: pretty;"><strong class="q" style="font-weight: 600; color: #241F1C;">Perché sì:</strong> le date fisse restano attaccate alla data reale (&ldquo;dom 27 &mdash; ogni 4ª domenica&rdquo;), quindi non serve una sezione a parte per le ricorrenze. <strong class="q" style="font-weight: 600; color: #241F1C;">Costo:</strong> occupa molto più spazio verticale, e su telefono la colonna delle date si stringe fino a spezzare le righe.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

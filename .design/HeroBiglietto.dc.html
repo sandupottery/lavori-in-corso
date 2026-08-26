@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&display=swap">
+  <style>
+    body { margin: 0; background: #FAF7F3; }
+    a { color: #9A4526; } a:hover { color: #C2603A; }
+    .q { font-family: Quicksand, "Century Gothic", "Avenir Next", sans-serif; }
+    .n { font-family: Newsreader, "Iowan Old Style", Georgia, serif; }
+  </style>
+</helmet>
+
+<div style="width: 900px; box-sizing: border-box; background: #FAF7F3; padding: 22px 22px 26px; display: flex; flex-direction: column; gap: 16px;">
+
+  <div class="q" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Biglietto &mdash; la prossima data è l&rsquo;eroe (in Main)</div>
+
+  <div style="height: 470px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 46px; align-items: center; padding: 0 52px; box-sizing: border-box; border: 1px solid #EFE7DC; border-radius: 3px;">
+
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div class="q" style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #5B534E;">Ceramica fatta a mano &middot; Bergamo</div>
+      <div class="q" style="font-size: 44px; font-weight: 600; line-height: 1.05; color: #241F1C;">Sto rifacendo<br>il sito.</div>
+      <div class="n" style="font-size: 18px; line-height: 1.58; color: #4A423D; text-wrap: pretty;">Nel frattempo ci vediamo ai mercatini.</div>
+
+      <div style="background: #EDE3D6; border: 1px solid #DFD1BF; border-radius: 4px; padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; margin-top: 4px;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="#C2603A" style="flex: none; margin-top: 2px;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg>
+        <div>
+          <div class="q" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5B534E;">Prossimo mercatino</div>
+          <div class="q" style="font-size: 19px; font-weight: 600; color: #241F1C; padding-top: 4px;">Sab 19 &ndash; dom 20 settembre</div>
+          <div class="n" style="font-size: 16px; color: #4A423D; padding-top: 2px;">L&rsquo;isola che c&rsquo;è, Parco comunale &mdash; Villa Guardia (CO)</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="position: relative; padding: 14px;">
+      <div style="position: absolute; inset: 0; border: 1px solid #DFD1BF; border-radius: 2px; transform: rotate(-1.2deg);"></div>
+      <img src="gatti-calico.jpg" alt="Tre gattini in ceramica smaltata" style="position: relative; display: block; width: 100%; height: 366px; object-fit: cover; border-radius: 2px;">
+    </div>
+
+  </div>
+
+  <div class="n" style="font-size: 14px; line-height: 1.55; color: #5B534E; text-wrap: pretty;"><strong class="q" style="font-weight: 600; color: #241F1C;">Perché sì:</strong> risponde subito alla domanda vera di chi arriva dal biglietto da visita &mdash; &ldquo;dove la trovo?&rdquo; &mdash; senza far scorrere la pagina. <strong class="q" style="font-weight: 600; color: #241F1C;">Costo:</strong> più composto, meno &ldquo;wow&rdquo; della Vetrina; la foto perde un po&rsquo; di scala.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

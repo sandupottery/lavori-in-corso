@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&display=swap">
+  <style>
+    body { margin: 0; background: #FAF7F3; }
+    a { color: #9A4526; text-decoration: none; border-bottom: 1px solid #E4A896; }
+    a:hover { color: #C2603A; border-bottom-color: #C2603A; }
+    .q { font-family: Quicksand, "Century Gothic", "Avenir Next", sans-serif; }
+    .n { font-family: Newsreader, "Iowan Old Style", Georgia, serif; }
+    .mese { font-family: Quicksand, "Century Gothic", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526; }
+    .giorno { font-family: Quicksand, "Century Gothic", sans-serif; font-size: 14px; font-weight: 600; color: #241F1C; white-space: nowrap; }
+    .luogo { font-family: Newsreader, Georgia, serif; font-size: 15px; color: #4A423D; line-height: 1.4; }
+    .riga { display: flex; align-items: baseline; gap: 9px; }
+  </style>
+</helmet>
+
+<div class="n" style="width: 390px; box-sizing: border-box; background: #FAF7F3; color: #241F1C; padding: 0 0 44px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 22px 24px 0;">
+    <img src="logo.svg" alt="Sandu Pottery" style="width: 138px; height: auto;">
+    <div class="q" style="display: flex; align-items: center; gap: 9px; font-size: 13px;">
+      <span style="font-weight: 700;">IT</span><span style="color: #6E645B;">/</span><span style="color: #5B534E;">EN</span>
+    </div>
+  </div>
+
+  <div style="padding: 30px 24px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div class="q" style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #5B534E;">Ceramica fatta a mano &middot; Bergamo</div>
+    <div class="q" style="font-size: 40px; font-weight: 600; line-height: 1.06; letter-spacing: -0.01em;">Sto rifacendo<br>il sito.</div>
+    <div class="n" style="font-size: 18px; line-height: 1.58; color: #4A423D; text-wrap: pretty;">Nel frattempo ci vediamo ai mercatini. Ogni pezzo nasce al tornio, viene modellato e decorato a mano.</div>
+  </div>
+
+  <div style="padding: 24px 24px 0;">
+    <img src="gatti-calico.jpg" alt="Tre gattini in ceramica smaltata" style="display: block; width: 100%; height: 300px; object-fit: cover; border-radius: 2px;">
+  </div>
+
+  <div style="padding: 22px 24px 0;">
+    <div style="display: flex; align-items: center; gap: 11px; background: #EDE3D6; border: 1px solid #DFD1BF; border-radius: 14px; padding: 14px 16px; min-height: 44px; box-sizing: border-box;">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="#C2603A" style="flex: none;" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg>
+      <div>
+        <div class="q" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5B534E;">Prossimo mercatino</div>
+        <div class="q" style="font-size: 15px; font-weight: 600; padding-top: 3px;">Sab 19 &ndash; dom 20 settembre</div>
+        <div class="luogo" style="font-size: 14px;">L&rsquo;isola che c&rsquo;è &mdash; Villa Guardia (CO)</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 34px 24px 0;">
+    <svg viewBox="0 0 342 14" width="342" height="14" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M3 8 C 50 3, 90 12, 130 7 S 210 2, 250 9 S 310 4, 339 7" fill="none" stroke="#9FAEBD" stroke-width="1.7" stroke-linecap="round"></path>
+    </svg>
+  </div>
+
+  <div style="padding: 26px 24px 0;">
+    <div class="q" style="font-size: 26px; font-weight: 600; margin-bottom: 20px;">Dove mi trovi</div>
+
+    <div style="background: #EDE3D6; border-radius: 4px; padding: 22px 20px; display: flex; flex-direction: column; gap: 24px;">
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="mese">Ogni mese, sempre</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div><div class="giorno">Bergamo Bassa</div><div class="luogo">la 2ª domenica, da marzo a giugno e da ottobre a dicembre</div></div>
+          <div><div class="giorno">Bergamo Alta</div><div class="luogo">la 4ª domenica, da aprile a giugno e da settembre a dicembre</div></div>
+          <div><div class="giorno">Milano, piazza Diaz</div><div class="luogo">il 4° giovedì</div></div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid #DFD1BF; padding-top: 22px; display: flex; flex-direction: column; gap: 18px;">
+        <div class="mese">Prossime date</div>
+
+        <div style="display: flex; flex-direction: column; gap: 11px;">
+          <div class="q" style="font-size: 15px; font-weight: 700;">Settembre</div>
+          <div class="riga"><svg viewBox="0 0 24 24" width="12" height="12" fill="#C2603A" style="flex: none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">19&ndash;20</span> <span class="luogo">L&rsquo;isola che c&rsquo;è, Villa Guardia (CO)</span></div></div>
+          <div class="riga"><svg viewBox="0 0 24 24" width="12" height="12" fill="#C2603A" style="flex: none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">24</span> <span class="luogo">Milano, piazza Diaz</span></div></div>
+          <div class="riga"><svg viewBox="0 0 24 24" width="12" height="12" fill="#C2603A" style="flex: none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">27</span> <span class="luogo">Bergamo Alta, Colle Aperto</span></div></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 11px;">
+          <div class="q" style="font-size: 15px; font-weight: 700;">Ottobre</div>
+          <div class="riga"><svg viewBox="0 0 24 24" width="12" height="12" fill="#C2603A" style="flex: none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">10</span> <span class="luogo">Milano, piazza XXIV Maggio (Darsena)</span></div></div>
+          <div class="riga"><svg viewBox="0 0 24 24" width="12" height="12" fill="#C2603A" style="flex: none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">11</span> <span class="luogo">Bergamo centro, piazza Cavour</span></div></div>
+          <div class="riga"><svg viewBox="0 0 24 24" width="12" height="12" fill="#C2603A" style="flex: none; transform: translateY(2px);" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg><div><span class="giorno">14&ndash;15</span> <span class="luogo">Milano, corso Garibaldi</span></div></div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border: 1px solid #DFD1BF; border-radius: 12px; background: #F6EFE5;">
+          <span class="q" style="font-size: 14px; font-weight: 600; color: #9A4526;">Vedi tutte le date</span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9A4526" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 34px 24px 0;">
+    <div class="q" style="font-size: 26px; font-weight: 600; margin-bottom: 16px;">Qualche pezzo</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+      <img src="gatti-grigi.jpg" alt="Due tazze-gatto smaltate" style="display: block; width: 100%; height: 165px; object-fit: cover; border-radius: 2px;">
+      <img src="servizio-gatti.jpg" alt="Servizio da caffè con gatti dipinti a mano" style="display: block; width: 100%; height: 165px; object-fit: cover; border-radius: 2px;">
+    </div>
+  </div>
+
+  <div style="padding: 36px 24px 0; display: flex; flex-direction: column; gap: 14px;">
+    <div class="q" style="font-size: 26px; font-weight: 600;">Scrivimi</div>
+    <div class="n" style="font-size: 17px; line-height: 1.58; color: #4A423D; text-wrap: pretty;">Per un pezzo su misura, un regalo o solo per sapere dove sarò.</div>
+    <a href="#" class="q" style="font-size: 18px; font-weight: 600; align-self: flex-start;">[EMAIL DA CONFERMARE]</a>
+    <div class="q" style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; padding-top: 4px;">
+      <a href="#" style="align-self: flex-start;">Instagram &mdash; @sandu_pottery</a>
+      <a href="#" style="align-self: flex-start;">Facebook</a>
+    </div>
+  </div>
+
+  <div style="padding: 40px 24px 0;">
+    <div class="q" style="font-size: 11px; color: #6E645B; border-top: 1px solid #E3DACF; padding-top: 16px; line-height: 1.7;">
+      Sandu Pottery &mdash; ceramiche fatte a mano, Bergamo<br>[RAGIONE SOCIALE &middot; P.IVA DA CONFERMARE]
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

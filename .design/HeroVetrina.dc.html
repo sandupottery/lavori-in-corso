@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&display=swap">
+  <style>
+    body { margin: 0; background: #FAF7F3; }
+    a { color: #9A4526; } a:hover { color: #C2603A; }
+    .q { font-family: Quicksand, "Century Gothic", "Avenir Next", sans-serif; }
+    .n { font-family: Newsreader, "Iowan Old Style", Georgia, serif; }
+  </style>
+</helmet>
+
+<div style="width: 900px; box-sizing: border-box; background: #FAF7F3; padding: 22px 22px 26px; display: flex; flex-direction: column; gap: 16px;">
+
+  <div class="q" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Vetrina &mdash; foto a tutto campo</div>
+
+  <div style="position: relative; height: 470px; border-radius: 3px; overflow: hidden;">
+    <img src="gatti-grigi.jpg" alt="Due tazze-gatto smaltate impilate" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(24,18,15,0.78) 0%, rgba(24,18,15,0.34) 44%, rgba(24,18,15,0.02) 76%);"></div>
+
+    <div style="position: absolute; left: 44px; right: 44px; bottom: 40px; display: flex; align-items: flex-end; justify-content: space-between; gap: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 420px;">
+        <div class="q" style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #EDE3D6;">Ceramica fatta a mano &middot; Bergamo</div>
+        <div class="q" style="font-size: 48px; font-weight: 600; line-height: 1.05; color: #FAF7F3;">Sto rifacendo il sito.</div>
+        <div class="n" style="font-size: 18px; line-height: 1.55; color: #EDE3D6; text-wrap: pretty;">Nel frattempo ci vediamo ai mercatini.</div>
+      </div>
+      <div style="display: inline-flex; align-items: center; gap: 10px; background: rgba(250,247,243,0.94); border-radius: 999px; padding: 11px 20px 11px 15px; flex: none;">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="#C2603A" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.4" ry="4.3"></ellipse><ellipse cx="5.4" cy="10.6" rx="2.5" ry="3.1"></ellipse><ellipse cx="10" cy="7.2" rx="2.4" ry="3.2"></ellipse><ellipse cx="15.5" cy="7.4" rx="2.4" ry="3.2"></ellipse><ellipse cx="19.6" cy="11.2" rx="2.4" ry="3"></ellipse></svg>
+        <span class="q" style="font-size: 13px; font-weight: 600; color: #241F1C;">19&ndash;20 set &middot; Villa Guardia</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="n" style="font-size: 14px; line-height: 1.55; color: #5B534E; text-wrap: pretty;"><strong class="q" style="font-weight: 600; color: #241F1C;">Perché sì:</strong> massimo impatto, il pezzo è la prima cosa che vedi. <strong class="q" style="font-weight: 600; color: #241F1C;">Costo:</strong> serve una foto orizzontale e pulita nella metà bassa, e le sue sono quasi tutte verticali e affollate. Con la foto sbagliata il testo diventa illeggibile.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&display=swap">
+  <style>
+    body { margin: 0; background: #FAF7F3; }
+    a { color: #9A4526; } a:hover { color: #C2603A; }
+    .q { font-family: Quicksand, "Century Gothic", "Avenir Next", sans-serif; }
+    .n { font-family: Newsreader, "Iowan Old Style", Georgia, serif; }
+  </style>
+</helmet>
+
+<div style="width: 900px; box-sizing: border-box; background: #FAF7F3; padding: 22px 22px 26px; display: flex; flex-direction: column; gap: 16px;">
+
+  <div class="q" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A4526;">Foglio &mdash; la foto come stampa appoggiata</div>
+
+  <div style="height: 470px; background: #FAF7F3; border: 1px solid #EFE7DC; border-radius: 3px; padding: 42px 52px; box-sizing: border-box; display: flex; align-items: center; gap: 46px;">
+
+    <div style="display: flex; flex-direction: column; gap: 14px; flex: 1 1 0; min-width: 0;">
+      <div class="q" style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #5B534E;">Ceramica fatta a mano &middot; Bergamo</div>
+      <div class="q" style="font-size: 46px; font-weight: 600; line-height: 1.05; color: #241F1C;">Sto rifacendo<br>il sito.</div>
+      <div class="n" style="font-size: 18px; line-height: 1.58; color: #4A423D; text-wrap: pretty;">Nel frattempo ci vediamo ai mercatini. Ogni pezzo nasce al tornio, uno per volta.</div>
+      <svg viewBox="0 0 300 12" width="180" height="12" preserveAspectRatio="none" style="margin-top: 4px;" aria-hidden="true">
+        <path d="M2 7 C 40 3, 80 11, 120 6 S 200 2, 240 9 S 280 4, 298 6" fill="none" stroke="#9FAEBD" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>
+    </div>
+
+    <div style="position: relative; flex: none; width: 330px;">
+      <div style="position: absolute; left: -12px; top: -12px; right: 12px; bottom: 12px; background: #EDE3D6; border-radius: 2px; transform: rotate(-2.4deg);"></div>
+      <div style="position: relative; background: #FFFDFA; padding: 13px 13px 46px; border-radius: 2px; box-shadow: 0 10px 26px rgba(36,31,28,0.10); transform: rotate(1.4deg);">
+        <img src="gatti-calico.jpg" alt="Tre gattini in ceramica smaltata" style="display: block; width: 100%; height: 262px; object-fit: cover;">
+        <div class="n" style="position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-size: 15px; font-style: italic; color: #5B534E;">le gattine, smalto a mano</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="n" style="font-size: 14px; line-height: 1.55; color: #5B534E; text-wrap: pretty;"><strong class="q" style="font-weight: 600; color: #241F1C;">Perché sì:</strong> il &ldquo;tocco quaderno&rdquo; è qui, nella stampa appoggiata storta con la didascalia scritta a mano &mdash; e funziona con le sue foto verticali. <strong class="q" style="font-weight: 600; color: #241F1C;">Costo:</strong> la rotazione e l&rsquo;ombra vanno tenute a bada, un grado di troppo e diventa scrapbook.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

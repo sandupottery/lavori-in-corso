@@ -1,0 +1,128 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "La pagina"
+    },
+    {
+      "id": "page-2",
+      "name": "Esplorazioni"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Foundations.dc.html",
+      "title": "Sistema visivo",
+      "page": "page-1",
+      "x": 0,
+      "y": 0,
+      "w": 900,
+      "h": 1600,
+      "print": "flow"
+    },
+    {
+      "file": "Main.dc.html",
+      "title": "Pagina intera — desktop",
+      "page": "page-1",
+      "x": 1020,
+      "y": 0,
+      "w": 1440,
+      "h": 3000,
+      "print": "flow"
+    },
+    {
+      "file": "Mobile.dc.html",
+      "title": "Pagina intera — telefono",
+      "page": "page-1",
+      "x": 2580,
+      "y": 0,
+      "w": 390,
+      "h": 2400,
+      "print": "flow"
+    },
+    {
+      "file": "HeroVetrina.dc.html",
+      "title": "Hero — Vetrina",
+      "page": "page-2",
+      "x": 0,
+      "y": 0,
+      "w": 900,
+      "h": 680
+    },
+    {
+      "file": "HeroFoglio.dc.html",
+      "title": "Hero — Foglio",
+      "page": "page-2",
+      "x": 1000,
+      "y": 0,
+      "w": 900,
+      "h": 680
+    },
+    {
+      "file": "HeroBiglietto.dc.html",
+      "title": "Hero — Biglietto (scelto)",
+      "page": "page-2",
+      "x": 2000,
+      "y": 0,
+      "w": 900,
+      "h": 680
+    },
+    {
+      "file": "CalendarioLista.dc.html",
+      "title": "Calendario — Lista",
+      "page": "page-2",
+      "x": 0,
+      "y": 840,
+      "w": 740,
+      "h": 860
+    },
+    {
+      "file": "CalendarioAgenda.dc.html",
+      "title": "Calendario — Agenda",
+      "page": "page-2",
+      "x": 840,
+      "y": 840,
+      "w": 740,
+      "h": 840
+    },
+    {
+      "file": "CalendarioDueTempi.dc.html",
+      "title": "Calendario — Due tempi (scelto)",
+      "page": "page-2",
+      "x": 1680,
+      "y": 840,
+      "w": 740,
+      "h": 780
+    }
+  ],
+  "annotations": [
+    {
+      "id": "nota-pagina",
+      "page": "page-1",
+      "x": -560,
+      "y": 0,
+      "w": 480,
+      "text": "Direzione: Porcellana + tocco Quaderno.\n\nFondo porcellana, molta aria, tipi a inchiostro, un solo accento terracotta. Il \"quaderno\" entra solo dove serve: il filo disegnato a mano fra le sezioni e la zampina come segno di elenco.\n\nDa confermare con tua madre: indirizzo email pubblico, ragione sociale e P.IVA per il piè di pagina, e 8-10 foto per la galleria."
+    },
+    {
+      "id": "nota-hero",
+      "page": "page-2",
+      "x": -560,
+      "y": 0,
+      "w": 480,
+      "text": "Tre modi di aprire la pagina.\n\nChi arriva ha in mano un biglietto da visita preso al mercatino e vuole sapere due cose: che esisti davvero, e dove ti trova la prossima volta.\n\nOgni artboard porta sotto il suo \"perché sì\" e il suo costo reale."
+    },
+    {
+      "id": "nota-calendario",
+      "page": "page-2",
+      "x": -560,
+      "y": 840,
+      "w": 480,
+      "text": "Il calendario contiene due informazioni diverse: il ritmo fisso (2ª domenica, 4° giovedì…) che non scade mai, e le circa 30 date puntuali che scadono una a una.\n\nLe tre varianti differiscono su come trattano questa doppia natura."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  }
+}
