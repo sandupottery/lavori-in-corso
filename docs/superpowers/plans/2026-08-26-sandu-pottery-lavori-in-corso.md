@@ -2202,15 +2202,44 @@ git commit -m "feat: add italian and english routes with a type-linked dictionar
 
 - [ ] **Step 1: Prepare the hero photograph**
 
+**Do not use `sips` here.** It preserves EXIF, and one of the source photographs
+carried GPS coordinates. That source file has been cleaned, but the pipeline
+itself must not be able to reintroduce location data into a published image.
+Pillow drops EXIF unless explicitly told to keep it, so use it:
+
 ```bash
 mkdir -p public/foto
-sips -s format jpeg -Z 1400 -s formatOptions 72 \
-  "docs/fonti-cliente/IMG_20240221_185700_427.webp" --out public/foto/gatti-calico.jpg
-sips -s format jpeg -Z 1400 -s formatOptions 72 \
-  "docs/fonti-cliente/IMG_20240221_185700_452.webp" --out public/foto/gatti-grigi.jpg
-sips -s format jpeg -Z 1400 -s formatOptions 68 \
-  "docs/fonti-cliente/IMG_20241023_165943.jpg" --out public/foto/servizio-gatti.jpg
+python3 - <<'EOF'
+from PIL import Image
+
+SORGENTI = [
+    ("docs/fonti-cliente/IMG_20240221_185700_427.webp", "public/foto/gatti-calico.jpg", 82),
+    ("docs/fonti-cliente/IMG_20240221_185700_452.webp", "public/foto/gatti-grigi.jpg", 82),
+    ("docs/fonti-cliente/IMG_20241023_165943.jpg", "public/foto/servizio-gatti.jpg", 78),
+]
+
+for sorgente, destinazione, qualita in SORGENTI:
+    im = Image.open(sorgente).convert("RGB")
+    im.thumbnail((1400, 1400), Image.LANCZOS)
+    # Ricreare l'immagine dai soli pixel scarta ogni metadato, GPS compreso.
+    pulita = Image.new(im.mode, im.size)
+    pulita.putdata(list(im.getdata()))
+    pulita.save(destinazione, "JPEG", quality=qualita, optimize=True, progressive=True)
+    print(f"{destinazione}  {im.size[0]}x{im.size[1]}")
+EOF
 ls -la public/foto
+```
+
+Then prove no metadata survived — this check is the point of the step:
+
+```bash
+python3 -c "
+from PIL import Image
+import glob, sys
+sporche = [f for f in glob.glob('public/foto/*.jpg') if dict(Image.open(f).getexif())]
+print('IMMAGINI CON EXIF:', sporche or 'nessuna — corretto')
+sys.exit(1 if sporche else 0)
+"
 ```
 
 Images are pre-sized because `images.unoptimized: true` means Next will not resize them. Each should land under ~250 KB.
@@ -2908,9 +2937,15 @@ qlmanage -t -s 512 -o /tmp public/logo.svg
 sips -Z 480 /tmp/logo.svg.png --out /tmp/logo-480.png
 sips -s format png -p 512 512 --padColor FAF7F3 /tmp/logo-480.png --out src/app/icon.png
 cp src/app/icon.png src/app/apple-icon.png
-# Immagine social 1200x630 dalla foto d'apertura.
-sips -s format jpeg -c 630 1200 -s formatOptions 78 \
-  public/foto/gatti-calico.jpg --out public/foto/og.jpg
+# Immagine social 1200x630 dalla foto d'apertura, senza metadati.
+python3 - <<'EOF'
+from PIL import Image, ImageOps
+
+im = ImageOps.fit(Image.open("public/foto/gatti-calico.jpg").convert("RGB"), (1200, 630), Image.LANCZOS)
+pulita = Image.new(im.mode, im.size)
+pulita.putdata(list(im.getdata()))
+pulita.save("public/foto/og.jpg", "JPEG", quality=82, optimize=True)
+EOF
 ls -la src/app/icon.png src/app/apple-icon.png public/foto/og.jpg
 ```
 
