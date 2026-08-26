@@ -40,7 +40,9 @@ export function Mercatini({ locale }: { locale: Locale }) {
 					<p className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-sp-terracotta-scritta">
 						{d.prossimeDate}
 					</p>
-					<p className="font-testo text-sm italic text-sp-nota">{d.suggerimentoDate}</p>
+					<p data-suggerimento className="font-testo text-sm italic text-sp-nota">
+						{d.suggerimentoDate}
+					</p>
 
 					<div data-elenco-date className="columns-1 gap-x-11 sm:columns-2">
 						{gruppi.map((g) => (

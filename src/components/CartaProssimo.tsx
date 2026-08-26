@@ -8,10 +8,7 @@ export function CartaProssimo({ locale }: { locale: Locale }) {
 	const d = dizionari[locale];
 
 	return (
-		<div
-			data-carta-prossimo
-			className="flex items-start gap-4 rounded border border-sp-bordo bg-sp-sabbia p-5"
-		>
+		<div className="flex items-start gap-4 rounded border border-sp-bordo bg-sp-sabbia p-5">
 			<Zampina className="mt-1 w-5 shrink-0 text-sp-terracotta" />
 			<div>
 				{mercati.map((m) => (

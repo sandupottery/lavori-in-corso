@@ -39,10 +39,11 @@ for(var j=0;j<mesi.length;j++){
   if(viva){restano++;}else{nascondi(mesi[j]);}
 }
 
-// 3. Calendario vuoto: mostra il messaggio, nascondi il download.
+// 3. Calendario vuoto: mostra il messaggio, nascondi il download e il suggerimento.
 if(restano===0){
   mostra(document.querySelector('[data-nessuna-data]'));
   nascondi(document.querySelector('[data-tutte-le-date]'));
+  nascondi(document.querySelector('[data-suggerimento]'));
 }
 
 // 4. Carta in testa: scopri il primo mercato non finito.
