@@ -3536,11 +3536,11 @@ git commit -m "docs: add agent conventions, adr, brand system and runbooks"
 
 ## Blocked on the client — do not invent these
 
-These are **not** implementation tasks. They are handoffs, tracked here so nothing is silently forgotten:
+These are **not** implementation tasks. They are handoffs, tracked here so nothing is silently forgotten. As of Task 12, most of the list below has since been completed and is kept only as history — see the two live items marked outstanding:
 
-1. **Aruba credentials** → create the Cloudflare zone, replicate the mail records from `docs/dns-cloudflare.md`, verify, then switch nameservers.
-2. **Cloudflare account** → set repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, create the Pages project `sandupottery-lavori-in-corso`.
-3. **8–10 photographs** → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile. The Shopify store is cancelled but its data is retained for two years, so reactivating at €1/month is the cheapest route to the full catalogue — that requires the client's passkey and is hers to do.
+1. ~~Aruba credentials → create the Cloudflare zone, replicate the mail records from `docs/dns-cloudflare.md`, verify, then switch nameservers.~~ **Done except the switch itself.** The zone is created and all mail records are replicated and verified DNS-only (see `docs/dns-cloudflare.md`). **Outstanding: the nameserver switch at Aruba** — deliberately not yet done, pending a deliberate cutover window.
+2. **Outstanding: Cloudflare Pages project and repo secrets.** The Cloudflare account already exists (it holds the zone from item 1) — it was never the blocker. What's left: create the Pages project `sandupottery-lavori-in-corso` in that account, and set repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` on `sandupottery/lavori-in-corso`.
+3. ~~8–10 photographs → extend the `FOTO` array in `Galleria.tsx` and delete the placeholder tile.~~ **Done.** Eight photographs ship in `Galleria.tsx`; there is no placeholder tile.
 4. **GitHub org `sandupottery`** → it does not exist yet (`gh api orgs/sandupottery` returns 404). Create it, then push to `sandupottery/lavori-in-corso` and confirm the repo is public.
 
 **Naming, decided:**
