@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.4...sandupottery-lavori-in-corso-v0.1.5) (2026-08-26)
+
+
+### Bug Fixes
+
+* drop the invitation line from the markets subtitle ([9058481](https://github.com/sandupottery/lavori-in-corso/commit/9058481064b0e3dc65e56e66dec491932ce79a89))
+
 ## [0.1.4](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.3...sandupottery-lavori-in-corso-v0.1.4) (2026-08-26)
 
 
