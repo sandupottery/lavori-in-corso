@@ -5,7 +5,6 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build && bun run scripts/genera-ics.ts",
-		"start": "next start",
 		"lint": "biome check .",
 		"lint:fix": "biome check --fix .",
 		"format": "biome format --write .",

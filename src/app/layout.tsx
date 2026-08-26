@@ -4,7 +4,7 @@ import { newsreader, quicksand } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Sandu Pottery",
+	title: sito.nome,
 	metadataBase: new URL(sito.url),
 	robots: { index: true, follow: true },
 };
