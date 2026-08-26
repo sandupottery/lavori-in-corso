@@ -21,6 +21,7 @@ export type Dizionario = {
 	altraLingua: string;
 	altraLinguaHref: string;
 	descrizioneMeta: string;
+	suggerimentoDate: string;
 };
 
 export const dizionari: Record<Locale, Dizionario> = {
@@ -48,6 +49,7 @@ export const dizionari: Record<Locale, Dizionario> = {
 		altraLinguaHref: "/en",
 		descrizioneMeta:
 			"Creazioni in ceramica lavorate a mano e al tornio, da Bergamo. Il calendario dei prossimi mercatini e come contattarmi.",
+		suggerimentoDate: "Tocca la data per salvarla nel calendario, il luogo per aprire la mappa.",
 	},
 	en: {
 		occhiello: "Handmade ceramics · Bergamo, Italy",
@@ -72,5 +74,6 @@ export const dizionari: Record<Locale, Dizionario> = {
 		altraLinguaHref: "/",
 		descrizioneMeta:
 			"Handmade wheel-thrown ceramics from Bergamo, Italy. The calendar of upcoming craft markets and how to get in touch.",
+		suggerimentoDate: "Tap a date to save it to your calendar, or a place to open the map.",
 	},
 };

@@ -40,10 +40,15 @@ export function Mercatini({ locale }: { locale: Locale }) {
 					<p className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-sp-terracotta-scritta">
 						{d.prossimeDate}
 					</p>
+					<p className="font-testo text-sm italic text-sp-nota">{d.suggerimentoDate}</p>
 
-					<div data-elenco-date className="grid gap-7 sm:grid-cols-2">
+					<div data-elenco-date className="columns-1 gap-x-11 sm:columns-2">
 						{gruppi.map((g) => (
-							<div key={g.chiave} data-gruppo-mese className="flex flex-col gap-3">
+							<div
+								key={g.chiave}
+								data-gruppo-mese
+								className="mb-7 flex break-inside-avoid flex-col gap-3"
+							>
 								<p className="font-display text-base font-bold text-sp-inchiostro">{g.etichetta}</p>
 								<ul className="flex flex-col gap-3">
 									{g.voci.map((m) => (
@@ -54,9 +59,12 @@ export function Mercatini({ locale }: { locale: Locale }) {
 										>
 											<Zampina className="mt-0.5 w-3.5 shrink-0 self-start text-sp-terracotta" />
 											<span>
-												<span className="font-display text-sm font-semibold text-sp-inchiostro">
+												<a
+													href={`/calendario/${m.id}.ics`}
+													className="inline-block py-1 font-display text-sm font-semibold text-sp-inchiostro underline decoration-sp-rosa decoration-dotted underline-offset-4 hover:decoration-sp-terracotta"
+												>
 													{giorniBrevi(m)}
-												</span>{" "}
+												</a>{" "}
 												<a
 													href={m.mappa}
 													target="_blank"
@@ -65,12 +73,6 @@ export function Mercatini({ locale }: { locale: Locale }) {
 												>
 													{m.citta}, {m.luogo}
 													{m.dettaglio ? ` (${m.dettaglio})` : ""}
-												</a>{" "}
-												<a
-													href={`/calendario/${m.id}.ics`}
-													className="inline-block py-1 font-display text-xs text-sp-terracotta-scritta underline decoration-sp-rosa underline-offset-2 hover:decoration-sp-terracotta"
-												>
-													{d.aggiungiAlCalendario}
 												</a>
 											</span>
 										</li>

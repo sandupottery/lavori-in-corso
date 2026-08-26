@@ -23,7 +23,7 @@ describe("dizionari", () => {
 
 	test("nessuna stringa inglese è rimasta in italiano", () => {
 		const chiavi = Object.keys(dizionari.it) as (keyof typeof dizionari.it)[];
-		expect(chiavi.length).toBe(20);
+		expect(chiavi.length).toBe(21);
 		const uguali = chiavi.filter((c) => dizionari.en[c] === dizionari.it[c]);
 		expect(uguali).toEqual([]);
 	});
