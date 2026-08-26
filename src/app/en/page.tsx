@@ -5,13 +5,13 @@ import { sito } from "@/content/sito";
 
 export const metadata: Metadata = {
 	title: sito.nome,
-	description: dizionari.it.descrizioneMeta,
+	description: dizionari.en.descrizioneMeta,
 	alternates: {
-		canonical: sito.url,
+		canonical: `${sito.url}/en`,
 		languages: { it: sito.url, en: `${sito.url}/en` },
 	},
 };
 
-export default function Home() {
-	return <Pagina locale="it" />;
+export default function HomeEn() {
+	return <Pagina locale="en" />;
 }
