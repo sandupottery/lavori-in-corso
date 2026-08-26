@@ -90,7 +90,9 @@ public/
 
 **Interfaces:**
 - Consumes: nothing (first task)
-- Produces: a repo where `bun run build`, `bun run lint`, `bunx tsc --noEmit` and `bun test` all succeed. Every later task assumes these four commands exist.
+- Produces: a repo where `bun run build`, `bun run lint`, `bunx tsc --noEmit` and `bun run test` all succeed. Every later task assumes these four commands exist.
+
+  Note on the test gate: bare `bun test` **exits 1** when no test files match — that is bun's behaviour, not a misconfiguration, and there is no bunfig or env-var override, only the `--pass-with-no-tests` CLI flag. So until Task 3 lands the first suite, `package.json`'s `test` script carries that flag and CI and lefthook both invoke `bun run test`. **Task 3 removes the flag** once real tests exist, so a future glob breakage or an accidentally emptied `tests/` directory fails CI instead of passing green.
 
 - [ ] **Step 1: Initialise the repo and move the source material out of the root**
 
@@ -559,15 +561,17 @@ export default function Home() {
 
 - [ ] **Step 10: Install and verify all four gates**
 
+Set the `test` script to `bun test --pass-with-no-tests` and have both `ci.yml` and `lefthook.yml` invoke `bun run test` rather than bare `bun test` — see the note under Interfaces for why.
+
 ```bash
 bun install
 bunx next build
 bun run lint
 bunx tsc --noEmit
-bun test
+bun run test
 ```
 
-Expected: `next build` writes `out/index.html`; lint and typecheck pass; `bun test` reports zero tests found and exits 0. `bun run build` still fails on the missing ics script — that is expected until Task 5.
+Expected: `next build` writes `out/index.html`; lint and typecheck pass; `bun run test` reports zero tests found and exits 0. `bun run build` still fails on the missing ics script — that is expected until Task 5.
 
 - [ ] **Step 11: Install the git hooks and commit**
 
@@ -1160,13 +1164,30 @@ La cliente non pubblica la partita IVA su questo sito: il piè di pagina non dev
 contenere né `ragioneSociale` né `partitaIva`, e non deve restare un segnaposto
 al loro posto.
 
-- [ ] **Step 7: Run all gates and commit**
+- [ ] **Step 7: Remove the empty-suite escape hatch**
+
+Task 1 set `"test": "bun test --pass-with-no-tests"` because bun exits 1 with no
+test files. Real tests now exist, so drop the flag — otherwise a broken glob or
+an emptied `tests/` directory would pass CI green with zero tests run.
+
+In `package.json`:
+
+```json
+		"test": "bun test",
+```
+
+Leave `ci.yml` and `lefthook.yml` invoking `bun run test`; only the flag goes.
+
+- [ ] **Step 8: Run all gates and commit**
 
 ```bash
-bun test && bun run lint && bunx tsc --noEmit
-git add src/content tests/mercati.test.ts
+bun run test && bun run lint && bunx tsc --noEmit
+git add src/content tests/mercati.test.ts package.json
 git commit -m "feat: add market calendar, recurring markets and site constants"
 ```
+
+Verify the flag is genuinely gone by confirming `bun run test` still passes with
+the suite present — it must, because `tests/mercati.test.ts` matches.
 
 ---
 
@@ -3243,13 +3264,44 @@ Copy spec §11 in full — the Aruba zone records, the cutover order, and the wa
 
 `README.md` covers: what the site is, the live URL, the stack, the four commands, where the calendar lives, and a prominent link to `docs/content-editing.md`. `LICENSE` is MIT with the client named as copyright holder. `CONTRIBUTING.md` states conventional commits and the four gates. `CODE_OF_CONDUCT.md` is Contributor Covenant 2.1. `SECURITY.md` gives a reporting address — use `[EMAIL DA CONFERMARE]` until the client supplies one.
 
-- [ ] **Step 8: Final verification of every gate**
+- [ ] **Step 8: Clear the two deferred minors from the Task 1 review**
+
+Both are one-liners inherited from the template this repo mirrors:
+
+1. `.github/workflows/release.yml` — delete `packages: write` from the
+   `permissions:` block. The GHCR image build was dropped from this workflow, so
+   the scope grants a token permission nothing uses.
+2. `commitlint.config.mjs` — the conventional preset allows more types than this
+   project's eight. Pin them:
+
+```js
+export default {
+	extends: ["@commitlint/config-conventional"],
+	rules: {
+		"type-enum": [
+			2,
+			"always",
+			["feat", "fix", "chore", "ci", "docs", "style", "refactor", "perf"],
+		],
+	},
+};
+```
+
+Verify the restriction bites:
+
+```bash
+echo "test: should be rejected" | bunx commitlint
+```
+
+Expected: non-zero exit naming `type-enum`.
+
+- [ ] **Step 9: Final verification of every gate**
 
 ```bash
 bun install --frozen-lockfile
 bun run lint
 bunx tsc --noEmit
-bun test
+bun run test
 bun run build
 ls out/index.html out/en.html out/robots.txt out/sitemap.xml out/manifest.webmanifest
 ls out/calendario | wc -l
@@ -3257,7 +3309,7 @@ ls out/calendario | wc -l
 
 Expected: all green; 26 `.ics` files.
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
 git add -A
