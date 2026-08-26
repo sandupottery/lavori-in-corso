@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.4](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.3...sandupottery-lavori-in-corso-v0.1.4) (2026-08-26)
+
+
+### Bug Fixes
+
+* apply the client's own wording and a better tettazze photo ([cdac8eb](https://github.com/sandupottery/lavori-in-corso/commit/cdac8eb49666e56067ade566872e291db1395b93))
+
+
+### CI/CD
+
+* add a manual workflow to attach the custom domain ([db1174a](https://github.com/sandupottery/lavori-in-corso/commit/db1174a16fa28ef056a77ecbe35f88beee642b11))
+
 ## [0.1.3](https://github.com/sandupottery/lavori-in-corso/compare/sandupottery-lavori-in-corso-v0.1.2...sandupottery-lavori-in-corso-v0.1.3) (2026-08-26)
 
 
