@@ -2016,9 +2016,11 @@ describe("dizionari", () => {
 	});
 
 	test("nessuna stringa inglese è rimasta in italiano", () => {
-		// Sentinella grossolana ma efficace su una copia così breve.
-		expect(dizionari.en.titolo).not.toBe(dizionari.it.titolo);
-		expect(dizionari.en.doveMiTrovi).not.toBe(dizionari.it.doveMiTrovi);
+		const chiavi = Object.keys(dizionari.it) as (keyof typeof dizionari.it)[];
+		// Senza questa riga un dizionario svuotato farebbe passare il filtro.
+		expect(chiavi.length).toBe(20);
+		const uguali = chiavi.filter((c) => dizionari.en[c] === dizionari.it[c]);
+		expect(uguali).toEqual([]);
 	});
 });
 ```
@@ -2091,7 +2093,7 @@ export const dizionari: Record<Locale, Dizionario> = {
 		prossimoMercatino: "Next market",
 		oggiSonoA: "Today I'm at",
 		doveMiTrovi: "Where to find me",
-		doveSottotitolo: "A stall, a wheel and a lot of cats. Say hello if you're passing.",
+		doveSottotitolo: "A stall, a wheel and cats. Come by — I'll know you.",
 		ogniMeseSempre: "Every month, always",
 		ogniMeseNota: "These never change — if you're local, you already know where I am.",
 		prossimeDate: "Upcoming dates",
@@ -2447,6 +2449,14 @@ export function Apertura({ locale }: { locale: Locale }) {
 	);
 }
 ```
+
+**Watch item carried from the Task 7 review.** The English route wraps `Pagina`
+in an unstyled `<div lang="en">` (nested layout), while the Italian route renders
+it as a direct child of `<body>`. Any layout that depends on being a direct child
+of `<body>` — `min-h-screen` paired with a parent-relative height, a `:first-child`
+selector, a top-level flex or grid context — will behave differently on `/en` than
+on `/`. Keep `Pagina`'s own root self-sufficient: it must not rely on its parent
+for height, display mode or child position. Verify both routes at both widths.
 
 - [ ] **Step 6: Assemble `src/components/Pagina.tsx`**
 
