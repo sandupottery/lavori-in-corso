@@ -1,6 +1,6 @@
 # Aggiungere o modificare una data
 
-Tutto il calendario vive in un solo file: `src/content/mercati.ts`.
+Le date vivono in un solo file: `src/content/mercati.ts`.
 
 ## Aggiungere un mercato
 

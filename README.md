@@ -33,9 +33,10 @@ context, commands, and the rules most likely to bite you if ignored.
 
 ## The calendar
 
-The full market calendar — recurring rhythm and one-off dates alike — lives in
-one file: `src/content/mercati.ts`. It feeds the rendered page, the `Event`
-JSON-LD, and the generated `.ics` calendar files, all from the same data.
+The dated markets live in `src/content/mercati.ts`; the standing monthly
+rhythm lives in `src/content/ricorrenze.ts`. `mercati.ts` feeds the rendered
+page, the `Event` JSON-LD, and the generated `.ics` calendar files, all from
+the same data.
 
 **Adding or changing a market date is documented in
 [`docs/content-editing.md`](docs/content-editing.md).** Read that before
