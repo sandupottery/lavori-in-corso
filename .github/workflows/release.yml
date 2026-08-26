@@ -51,9 +51,24 @@ jobs:
               with:
                   name: static-site
                   path: out/
+            # Il progetto Pages non esiste al primo deploy, e wrangler non lo
+            # crea da solo: fallisce con "Project not found". Questo passo lo
+            # crea e viene ignorato quando esiste già, così il primo deploy su
+            # un account nuovo funziona senza passare dal pannello.
+            - name: Ensure the Pages project exists
+              uses: cloudflare/wrangler-action@v3
+              continue-on-error: true
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: pages project create sandupottery-lavori-in-corso --production-branch main
+
+            # `--branch=main` è necessario: senza, wrangler deduce il ramo dal
+            # contesto e pubblica su un URL di anteprima invece che in
+            # produzione.
             - name: Deploy to Cloudflare Pages
               uses: cloudflare/wrangler-action@v3
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                  command: pages deploy out --project-name=sandupottery-lavori-in-corso
+                  command: pages deploy out --project-name=sandupottery-lavori-in-corso --branch=main
