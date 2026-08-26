@@ -181,7 +181,6 @@ export default nextConfig;
 		"isolatedModules": true,
 		"jsx": "react-jsx",
 		"incremental": true,
-		"types": ["bun-types"],
 		"plugins": [{ "name": "next" }],
 		"paths": { "@/*": ["./src/*"] }
 	},
@@ -196,6 +195,8 @@ export default nextConfig;
 	"exclude": ["node_modules", "out"]
 }
 ```
+
+There is deliberately no `types` array: `@types/bun` is auto-included, and an explicit array would disable that and break `import ... from "bun:test"`.
 
 `noUncheckedIndexedAccess` is on deliberately: the calendar code indexes arrays constantly and this catches the off-by-one class of bug at compile time.
 
@@ -319,6 +320,7 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 .DS_Store
 .env*.local
+.superpowers/
 .design/*.html
 !.design/*.dc.html
 ```
@@ -1518,6 +1520,20 @@ describe("creaICS", () => {
 		expect(ics).toContain("\r\n A");
 	});
 
+	test("non spezza un carattere multi-byte a fine riga", () => {
+		// Accenti fitti attorno all'ottetto 75: se la maschera di continuazione
+		// non viene applicata, qui compare un carattere di sostituzione.
+		const titolo = `${"è".repeat(60)} coda`;
+		const ics = creaICS([{ ...evento, titolo }], "Mercatini", STAMP);
+		expect(ics).not.toContain("\uFFFD");
+		const ricomposto = ics
+			.split("\r\n")
+			.filter((r) => r.startsWith("SUMMARY:") || r.startsWith(" "))
+			.map((r, i) => (i === 0 ? r.slice("SUMMARY:".length) : r.slice(1)))
+			.join("");
+		expect(ricomposto).toBe(titolo);
+	});
+
 	test("è deterministico a parità di input", () => {
 		expect(creaICS([evento], "Mercatini", STAMP)).toBe(creaICS([evento], "Mercatini", STAMP));
 	});
@@ -1567,8 +1583,11 @@ function piega(riga: string): string {
 
 	while (inizio < byte.length) {
 		let fine = Math.min(inizio + limite, byte.length);
-		// Non spezzare mai a metà di un carattere multi-byte.
-		while (fine > inizio && fine < byte.length && (byte[fine] as number & 0xc0) === 0x80) {
+		// Non spezzare mai a metà di un carattere multi-byte: i byte di
+		// continuazione UTF-8 hanno i due bit alti a 10.
+		// Le parentesi contano: `x as number & 0xc0` verrebbe letto come
+		// intersezione di tipi e la maschera non verrebbe mai applicata.
+		while (fine > inizio && fine < byte.length && ((byte[fine] as number) & 0xc0) === 0x80) {
 			fine--;
 		}
 		pezzi.push(byte.subarray(inizio, fine).toString("utf8"));
@@ -1618,7 +1637,7 @@ export function creaICS(
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `bun test tests/ics.test.ts`
-Expected: PASS — 8 tests.
+Expected: PASS — 9 tests.
 
 - [ ] **Step 5: Write `scripts/genera-ics.ts`**
 
@@ -2861,7 +2880,10 @@ git commit -m "feat: add gallery, contact and footer with json-ld"
 mkdir -p src/app
 # Icona quadrata su fondo porcellana, dal logo recuperato.
 qlmanage -t -s 512 -o /tmp public/logo.svg
-sips -s format png -z 512 512 --padColor FAF7F3 /tmp/logo.svg.png --out src/app/icon.png
+# -z forza le dimensioni ignorando le proporzioni, e il logo è 691x221:
+# prima si ridimensiona conservando l'aspetto, poi si riempie il quadrato.
+sips -Z 480 /tmp/logo.svg.png --out /tmp/logo-480.png
+sips -s format png -p 512 512 --padColor FAF7F3 /tmp/logo-480.png --out src/app/icon.png
 cp src/app/icon.png src/app/apple-icon.png
 # Immagine social 1200x630 dalla foto d'apertura.
 sips -s format jpeg -c 630 1200 -s formatOptions 78 \
